@@ -1,0 +1,41 @@
+{
+  "name": "open-wa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@open-wa/wa-automate": "^1.9.74",
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "delay": "^4.3.0",
+    "fetch-base64": "^2.1.2",
+    "file-base64": "^1.0.0",
+    "glob": "^7.1.6",
+    "instagram-id-to-url-segment": "0.0.0",
+    "instagram-private-api": "^1.40.1",
+    "line": "^0.1.8",
+    "line-reader": "^0.4.0",
+    "lyricist": "^2.2.2",
+    "moment-timezone": "^0.5.31",
+    "mysql": "^2.18.1",
+    "nhentai-js": "^3.3.0",
+    "node-fetch": "^2.6.0",
+    "pdfmake": "^0.1.65",
+    "reader": "0.0.8",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5",
+    "tesseract.js": "^2.1.1",
+    "text-to-mp3": "^1.0.4",
+    "tiktok-scraper": "^1.2.2",
+    "translatte": "^2.5.8",
+    "unzipper": "^0.10.11",
+    "wtf_wikipedia": "^8.3.0",
+    "youtube-dl": "^3.0.2"
+  }
+}
