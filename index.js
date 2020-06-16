@@ -42,32 +42,6 @@ wa.create('INI_SESSION', {
     headless: true,
 }).then(client => start(client));
 
-const getLinkmp3 = (id) => new Promise((resolve, reject) => {
-  fetch('http://s1.downloadlagu321.net/@grab?vidID='+id+'&format=mp3&streams=mp3&api=button&appSecretToken=5edc71d39c12bd231f5633db669910947ef5e40f', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-      'cookie': '__cfduid=d7276f37cdb0fb770fcfda32ccc23d7831591852642; PHPSESSID=6i4lqogafg5bnalcavbltf6kpt; glx_pp_11665_201813106={"fl":1,"loaded_time":1591852999,"unload_time":1591853013}',
-      'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
-      'referer': 'https://s1.downloadlagu321.net/@api/button/mp3/'+id,
-      'x-requested-with': 'XMLHttpRequest'
-    },
-    body : {sessID: '6i4lqogafg5bnalcavbltf6kpt'}
-  }).then(async res => {
-    const page = await res.text();
-    const $ = cheerio.load(page);
-    const url = $('a[class="download-mp3-url btn audio q128"]').attr('href');
-    const link = url.split('//').join('https://');
-    const size = $("div[class='btn-filesize']").last().html();
-    const rate = $("div[class='btn-bitrate']").last().html();
-    const ress = {
-      link : link,
-      size : size,
-      bitrate : rate
-    }
-    resolve(ress);
-  }).catch(err => reject(err));
-});
 const searchLagu = (judul) => new Promise((resolve, reject) => {
   fetch(`https://downloadlagu321.net/api/search/${judul}`, {
     method: 'GET',
@@ -81,6 +55,82 @@ const searchLagu = (judul) => new Promise((resolve, reject) => {
       body : await res.json(),
     }
     resolve(result.body[0]);
+  }).catch(err => reject(err));
+});
+const getRedirect = (id) => new Promise((resolve, reject) => {
+  fetch(`https://downloadlagu321.net/dl/${id}`, {
+    method: 'GET',
+    headers: {
+      'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
+      'cookie': '__cfduid=d7276f37cdb0fb770fcfda32ccc23d7831591852642; glx_pp_11665_201813106={"fl":1,"last_fired_time":1591854799,"last_fired_click_num":0,"pop_count":1,"click_num":2,"unload_time":1591854808}; XSRF-TOKEN=eyJpdiI6IjFoTDFCMFhJZE4waGRkcHNtbWV3VEE9PSIsInZhbHVlIjoiYlRUdU5vc2FcL1YxXC9yeThlUXVlOTdIVFlvbVEyNVhPeWsxcmZEYm5YMXFsSUdaN0JcL2Ryblhub0UxQzQxTFBsViIsIm1hYyI6ImUwMjhlMjM5MDcxODU4ZDMyZDZkYzljNGJiNTYzMWIzODQ2MzY2MzVlYTkzOGJjZmM5NTdjMjRlMWU2MzJlOGIifQ%3D%3D; laravel_session=eyJpdiI6InYyZ3k2bXZZRmgrUlwvdHE0RjIwVGZRPT0iLCJ2YWx1ZSI6IkRPXC85aGdtaFAzMnVoN2pNN3RPNXVMbnQraERWMVpveDV2OWVBMnJ5T0NQNEc3ZDZIY2N0b0t2ZUlOdXZxUW9GIiwibWFjIjoiYjA0YWNiMWI2NDZjNDRhMTM4ZTAxMWI5MmJhNWZiYzhmNzk3ZGY0Zjg2ODdjZWViMzA5ZmQ1MjkwYzA4NzBjZiJ9; X1bGxqPXzxWPEoS8kviYjtzZ0o9zEhySIJgOpXtf=eyJpdiI6ImI3OGRXblczcU50MXZydDlvdGtZZ3c9PSIsInZhbHVlIjoicms5d1dWYVdNVkFmTWNTWW4ycHpVN0RFbm1Dd0NEcFlaemEyUk0yOGVZREFKQWtDd1VEUEcyVHlIMDZoaURvbWNsaWx4NFpEUDFxdkRKaWpBenA2ejZcL0Zaa3dJamluWlhwMjRQbGxWQXdUV2RUdFlueEZ6TlNPVnFBZWx5NkNJeDNcLzNnMGdUZTBjTlo0S1pJM3UwQW96V1BuXC9BNDBCZm9nMWhLem5UNXJNWG1RWWZ3bkM5WndzV2JhWVh5XC9BdmxGN3FEY1wvXC9aUTBQajdIRmFsd0VXU0k1QUNkaGJBcXBuTFBUM0FIbVo1Z2hMUGpSdk5PV3o4WlZRNStFSnZXU2VCTVVDSTFcL3FpQnBFWWdmNFlGZDZXS3MyR2t5KzBpSWZHZFV4QlBqWCtvUDN2VCtQQjVqcE5mTmMwaEkwK0ZaTWJOWmpYVmZhdVg4SVdOUCtCVFRXRlF4aytrOFpoMVd1dnFaTEk4MW1yYnlwZzk2bmxyam5WcEsxaUpQZUhcL0locjhLSFwvRjdhVWtcL25MSjg3dnpnbUJ2eEtHczNzcjFIU2IrTERKc0NmSXBrYkFwdjBKZzBGWm1uUURQTmNxM0YrUmNJTXFGaUFYU0xkZFdrVDRUa0xQQWhqWjAzTkRcLzZLM1ZqNEN6a2tLV081ZGlxRzZWcDZXSGt2UVpuOTNuTFdwbDA1d3haQlNTZGFFUjlnMERzSnRpdlRFTE5PazRQXC8xTTI0c0VvNDdRVXhSSTVjVkFwakFwU3hpXC9EY3pEZlFpaDREanVWSWlRYUZlOGVNSmVhZklsVmwwZnppUWNLWFRlRWUyTUI3d1BnOVpPS1laTk9OTkkySVIrUjdLVzd4RDJ1NitwYkI1NHZsZ2pXSU1XSHVmaTUwbXo5bTRUZ2N2SGtBcE5hcnd5XC9Nb29LUlBpVTlCVXVCSkY2dm1ITVhUOFQ0TURmSzlHbWx3R1BKeGRtQmM2eGxRXC9GUHdBeEVvS0dNWW5RK3RNN0Joc2U0K3V3QjloTFZpZ0xWUmltZVROeTdyRWpvVmtld251STV3bUc0NUNBRFwvRXU2c1FDVjVKMFRYRzNaQms9IiwibWFjIjoiZGJlNGQ3OWI1YmQyMWJjYWRmZWU2NmE4YzRmZDRjNDAyODJhOTEyNDg3MzBhYTM2MjA5YjJlOWU4NmYxMjkwNiJ9',
+    }
+  }).then(async res => {
+    const page = await res.text();
+    const $ = cheerio.load(page);
+    const url = $('div center a').attr('href');
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
+        'cookie': '__cfduid=d7276f37cdb0fb770fcfda32ccc23d7831591852642; glx_pp_11665_201813106={"fl":1,"last_fired_time":1591854799,"last_fired_click_num":0,"pop_count":1,"click_num":2,"unload_time":1591854808}; XSRF-TOKEN=eyJpdiI6IjFoTDFCMFhJZE4waGRkcHNtbWV3VEE9PSIsInZhbHVlIjoiYlRUdU5vc2FcL1YxXC9yeThlUXVlOTdIVFlvbVEyNVhPeWsxcmZEYm5YMXFsSUdaN0JcL2Ryblhub0UxQzQxTFBsViIsIm1hYyI6ImUwMjhlMjM5MDcxODU4ZDMyZDZkYzljNGJiNTYzMWIzODQ2MzY2MzVlYTkzOGJjZmM5NTdjMjRlMWU2MzJlOGIifQ%3D%3D; laravel_session=eyJpdiI6InYyZ3k2bXZZRmgrUlwvdHE0RjIwVGZRPT0iLCJ2YWx1ZSI6IkRPXC85aGdtaFAzMnVoN2pNN3RPNXVMbnQraERWMVpveDV2OWVBMnJ5T0NQNEc3ZDZIY2N0b0t2ZUlOdXZxUW9GIiwibWFjIjoiYjA0YWNiMWI2NDZjNDRhMTM4ZTAxMWI5MmJhNWZiYzhmNzk3ZGY0Zjg2ODdjZWViMzA5ZmQ1MjkwYzA4NzBjZiJ9; X1bGxqPXzxWPEoS8kviYjtzZ0o9zEhySIJgOpXtf=eyJpdiI6ImI3OGRXblczcU50MXZydDlvdGtZZ3c9PSIsInZhbHVlIjoicms5d1dWYVdNVkFmTWNTWW4ycHpVN0RFbm1Dd0NEcFlaemEyUk0yOGVZREFKQWtDd1VEUEcyVHlIMDZoaURvbWNsaWx4NFpEUDFxdkRKaWpBenA2ejZcL0Zaa3dJamluWlhwMjRQbGxWQXdUV2RUdFlueEZ6TlNPVnFBZWx5NkNJeDNcLzNnMGdUZTBjTlo0S1pJM3UwQW96V1BuXC9BNDBCZm9nMWhLem5UNXJNWG1RWWZ3bkM5WndzV2JhWVh5XC9BdmxGN3FEY1wvXC9aUTBQajdIRmFsd0VXU0k1QUNkaGJBcXBuTFBUM0FIbVo1Z2hMUGpSdk5PV3o4WlZRNStFSnZXU2VCTVVDSTFcL3FpQnBFWWdmNFlGZDZXS3MyR2t5KzBpSWZHZFV4QlBqWCtvUDN2VCtQQjVqcE5mTmMwaEkwK0ZaTWJOWmpYVmZhdVg4SVdOUCtCVFRXRlF4aytrOFpoMVd1dnFaTEk4MW1yYnlwZzk2bmxyam5WcEsxaUpQZUhcL0locjhLSFwvRjdhVWtcL25MSjg3dnpnbUJ2eEtHczNzcjFIU2IrTERKc0NmSXBrYkFwdjBKZzBGWm1uUURQTmNxM0YrUmNJTXFGaUFYU0xkZFdrVDRUa0xQQWhqWjAzTkRcLzZLM1ZqNEN6a2tLV081ZGlxRzZWcDZXSGt2UVpuOTNuTFdwbDA1d3haQlNTZGFFUjlnMERzSnRpdlRFTE5PazRQXC8xTTI0c0VvNDdRVXhSSTVjVkFwakFwU3hpXC9EY3pEZlFpaDREanVWSWlRYUZlOGVNSmVhZklsVmwwZnppUWNLWFRlRWUyTUI3d1BnOVpPS1laTk9OTkkySVIrUjdLVzd4RDJ1NitwYkI1NHZsZ2pXSU1XSHVmaTUwbXo5bTRUZ2N2SGtBcE5hcnd5XC9Nb29LUlBpVTlCVXVCSkY2dm1ITVhUOFQ0TURmSzlHbWx3R1BKeGRtQmM2eGxRXC9GUHdBeEVvS0dNWW5RK3RNN0Joc2U0K3V3QjloTFZpZ0xWUmltZVROeTdyRWpvVmtld251STV3bUc0NUNBRFwvRXU2c1FDVjVKMFRYRzNaQms9IiwibWFjIjoiZGJlNGQ3OWI1YmQyMWJjYWRmZWU2NmE4YzRmZDRjNDAyODJhOTEyNDg3MzBhYTM2MjA5YjJlOWU4NmYxMjkwNiJ9',
+      }
+    }).then(res => {
+      const host = new URL(res.url)
+      const path = host.pathname.slice(17)
+      const ress = {
+        redirect : res.url,
+        host : host.origin,
+        path : path
+      }
+      resolve(ress)
+    }).catch(err => reject(err));
+  }).catch(err => reject(err))
+});
+const getSessID = (link) => new Promise((resolve, reject) => {
+  fetch(link, {
+    method: 'GET',
+    headers: {
+      'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
+      'cookie': '__cfduid=d7276f37cdb0fb770fcfda32ccc23d7831591852642; glx_pp_11665_201813106={"fl":1,"last_fired_time":1591854799,"last_fired_click_num":0,"pop_count":1,"click_num":2,"unload_time":1591854808}; XSRF-TOKEN=eyJpdiI6IjFoTDFCMFhJZE4waGRkcHNtbWV3VEE9PSIsInZhbHVlIjoiYlRUdU5vc2FcL1YxXC9yeThlUXVlOTdIVFlvbVEyNVhPeWsxcmZEYm5YMXFsSUdaN0JcL2Ryblhub0UxQzQxTFBsViIsIm1hYyI6ImUwMjhlMjM5MDcxODU4ZDMyZDZkYzljNGJiNTYzMWIzODQ2MzY2MzVlYTkzOGJjZmM5NTdjMjRlMWU2MzJlOGIifQ%3D%3D; laravel_session=eyJpdiI6InYyZ3k2bXZZRmgrUlwvdHE0RjIwVGZRPT0iLCJ2YWx1ZSI6IkRPXC85aGdtaFAzMnVoN2pNN3RPNXVMbnQraERWMVpveDV2OWVBMnJ5T0NQNEc3ZDZIY2N0b0t2ZUlOdXZxUW9GIiwibWFjIjoiYjA0YWNiMWI2NDZjNDRhMTM4ZTAxMWI5MmJhNWZiYzhmNzk3ZGY0Zjg2ODdjZWViMzA5ZmQ1MjkwYzA4NzBjZiJ9; X1bGxqPXzxWPEoS8kviYjtzZ0o9zEhySIJgOpXtf=eyJpdiI6ImI3OGRXblczcU50MXZydDlvdGtZZ3c9PSIsInZhbHVlIjoicms5d1dWYVdNVkFmTWNTWW4ycHpVN0RFbm1Dd0NEcFlaemEyUk0yOGVZREFKQWtDd1VEUEcyVHlIMDZoaURvbWNsaWx4NFpEUDFxdkRKaWpBenA2ejZcL0Zaa3dJamluWlhwMjRQbGxWQXdUV2RUdFlueEZ6TlNPVnFBZWx5NkNJeDNcLzNnMGdUZTBjTlo0S1pJM3UwQW96V1BuXC9BNDBCZm9nMWhLem5UNXJNWG1RWWZ3bkM5WndzV2JhWVh5XC9BdmxGN3FEY1wvXC9aUTBQajdIRmFsd0VXU0k1QUNkaGJBcXBuTFBUM0FIbVo1Z2hMUGpSdk5PV3o4WlZRNStFSnZXU2VCTVVDSTFcL3FpQnBFWWdmNFlGZDZXS3MyR2t5KzBpSWZHZFV4QlBqWCtvUDN2VCtQQjVqcE5mTmMwaEkwK0ZaTWJOWmpYVmZhdVg4SVdOUCtCVFRXRlF4aytrOFpoMVd1dnFaTEk4MW1yYnlwZzk2bmxyam5WcEsxaUpQZUhcL0locjhLSFwvRjdhVWtcL25MSjg3dnpnbUJ2eEtHczNzcjFIU2IrTERKc0NmSXBrYkFwdjBKZzBGWm1uUURQTmNxM0YrUmNJTXFGaUFYU0xkZFdrVDRUa0xQQWhqWjAzTkRcLzZLM1ZqNEN6a2tLV081ZGlxRzZWcDZXSGt2UVpuOTNuTFdwbDA1d3haQlNTZGFFUjlnMERzSnRpdlRFTE5PazRQXC8xTTI0c0VvNDdRVXhSSTVjVkFwakFwU3hpXC9EY3pEZlFpaDREanVWSWlRYUZlOGVNSmVhZklsVmwwZnppUWNLWFRlRWUyTUI3d1BnOVpPS1laTk9OTkkySVIrUjdLVzd4RDJ1NitwYkI1NHZsZ2pXSU1XSHVmaTUwbXo5bTRUZ2N2SGtBcE5hcnd5XC9Nb29LUlBpVTlCVXVCSkY2dm1ITVhUOFQ0TURmSzlHbWx3R1BKeGRtQmM2eGxRXC9GUHdBeEVvS0dNWW5RK3RNN0Joc2U0K3V3QjloTFZpZ0xWUmltZVROeTdyRWpvVmtld251STV3bUc0NUNBRFwvRXU2c1FDVjVKMFRYRzNaQms9IiwibWFjIjoiZGJlNGQ3OWI1YmQyMWJjYWRmZWU2NmE4YzRmZDRjNDAyODJhOTEyNDg3MzBhYTM2MjA5YjJlOWU4NmYxMjkwNiJ9',
+    }
+  }).then(async res => {
+    const page = await res.text();
+    const $ = cheerio.load(page);
+    const type = $('script').get()[1].attribs.type;
+    const data = $(`script[type="${type}"]`).get()[3].children[0].data;
+    const sessid = data.match(/sessID: '(.+?)'/)[1];
+    const secret = data.match(/&appSecretToken=(.+?)"/)[1];
+    const ress = {
+      session : sessid,
+      secret : secret
+    }
+    resolve(ress)
+  }).catch(err => reject(err));
+});
+const getLinkmp3 = (host, path, sessid, secret) => new Promise((resolve, reject) => {
+  fetch(`${host}/@grab?vidID=${path}&format=mp3&streams=mp3&api=button&appSecretToken=${secret}`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'cookie': '__cfduid=d7276f37cdb0fb770fcfda32ccc23d7831591852642; PHPSESSID='+sessid+'; glx_pp_11665_201813106={"fl":1,"loaded_time":1591852999,"unload_time":1591853013}',
+      'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
+      'referer': host+'/@api/button/mp3/',
+      'x-requested-with': 'XMLHttpRequest'
+    },
+    body : {sessID: sessid}
+  }).then(async res => {
+    const page = await res.text();
+    const $ = cheerio.load(page);
+    const url = $('a[class="download-mp3-url btn audio q128"]').attr('href');
+    const link = url.split('//').join('https://');
+    const size = $("div[class='btn-filesize']").last().html();
+    const rate = $("div[class='btn-bitrate']").last().html();
+    const ress = {
+      link : link,
+      size : size,
+      bitrate : rate
+    }
+    resolve(ress);
   }).catch(err => reject(err));
 });
 const rDir = (path) => new Promise((resolve, reject) => {
@@ -3325,7 +3375,9 @@ else if (message.body.toLowerCase() == '/rules') {
   const judul = message.body.slice(6);
   const detail = await searchLagu(judul);
   const filename = `${detail.title}-${randomName(5)}.mp3`;
-  const reverse = await getLinkmp3(detail.id);
+  const direk = await getRedirect(detail.id);
+  const dataSesi = await getSessID(direk.redirect);
+  const reverse = await getLinkmp3(direk.host, direk.path, dataSesi.session, dataSesi.secret);
   const cek = reverse.size.match(/\d+/g)[0];
   if(cek > 16){
     console.log(time(), `SUCCESS | send /lagu lebih dari 16mb`)
