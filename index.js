@@ -990,6 +990,12 @@ contoh: /wiki binatang
 
 */teks* : mengubah gambar ke dalam teks
 
+*/lagu* : mencari lagu berdasarkan judul
+contoh: /lagu lathi
+
+*/scribd* : mengunduh pdf dari scribd
+contoh: /scribd link dokumen
+
     
 _made with ❤ azisek__`);
   console.log(waktu, "SUCCESS | show MENU");
@@ -1508,28 +1514,24 @@ vi: Vietnamese`)
             var bitmap = fs.readFileSync(file);
             return new Buffer.from(bitmap).toString('base64');
           }
-          const options = ['--username=user', '--password=hunter2']
-          youtubedl.getInfo(link, options, async function(err, info) {
-            if (err) {console.log(err)}
-              else{
-                const all = info.formats;
-                let get_audio = all.find(o => o.ext === 'm4a');
-                const tiitle = info._filename;
-                const tiitle_file = tiitle.split('mp4').join('mp3')
-                const link_audio = get_audio.url;
-                if (fs.existsSync('./ytmp3/' + tiitle_file)) {
-                  const a = base64_encode('./ytmp3/' + tiitle_file);
-                  const audio = 'data:audio/mpeg'+";base64,"+a.toString()
-                  await client.sendFile(message.from, audio, tiitle_file, tiitle_file, null, true);
-                }else{
-                download(link_audio, './ytmp3/'+tiitle_file, async function(){
-                  const a = base64_encode('./ytmp3/' + tiitle_file);
-                  const audio = 'data:audio/mpeg'+";base64,"+a.toString()
-                  await client.sendFile(message.from, audio, tiitle_file, tiitle_file, null, true);
-                })
-              }
-              }
-            })
+          const id = idYT(link);
+          const api = await apiYT(id);
+          const judul = api.title.split('/').join('atau');
+          const filename = `${judul}-${randomName(5)}.mp3`;
+          const direk = await getRedirect(id);
+          const dataSesi = await getSessID(direk.redirect);
+          const reverse = await getLinkmp3(direk.host, direk.path, dataSesi.session, dataSesi.secret);
+          if (fs.existsSync('./ytmp3/' + filename)) {
+            const a = await delay(2000, {value : base64_encode('./ytmp3/' + filename)});
+            const audio = await delay(2000, {value : 'data:audio/mp4'+";base64,"+a.toString()})
+            await delay(2000, {value : await client.sendFile(message.from, audio, filename, filename, message.id, true)});
+          }else{
+          download(reverse.link, './ytmp3/'+filename, async function(){
+            const a = await delay(2000, {value : base64_encode('./ytmp3/' + filename)});
+            const audio = await delay(2000, {value : 'data:audio/mp4'+";base64,"+a.toString()})
+            await delay(2000, {value : await client.sendFile(message.from, audio, filename, filename, message.id, true)});
+          })
+        }
           console.log(time(), `SUCCESS | send /ytmp3`)
         }
       }catch(err){}
@@ -3408,13 +3410,12 @@ else if (message.body.toLowerCase() == '/rules') {
     console.log(time(), `SUCCESS | send /lagu lebih dari 16mb`)
     client.sendText(message.from, `Judul : ${detail.title}\nBitrate : ${reverse.bitrate}\nSize : ${reverse.size}\nLink : ${await short(reverse.link)}\n\n_GAGAL! Tidak bisa mengirim audio!_`);  
   }else{
-    console.log(reverse.link);
     client.sendText(message.from, `Judul : ${detail.title}\nBitrate : ${reverse.bitrate}\nSize : ${reverse.size}\nLink : ${await short(reverse.link)}\n\n_sedang mengirim audio..._`);
-    download(reverse.link, './lagu/' + filename, function(){
-      const filemime = mime.getType('./lagu/' + filename);
-      const a = base64_encode('./lagu/' + filename);
-      const audio = `data:${filemime};base64,${a.toString()}`;
-      client.sendFile(message.from, audio, filename, detail.title);
+    download(reverse.link, './lagu/' + filename,async function(){
+      const filemime = await delay(2000, {value : mime.getType('./lagu/' + filename)});
+      const a = await delay(2000, {value : base64_encode('./lagu/' + filename)});
+      const audio = await delay(2000, {value : `data:${filemime};base64,${a.toString()}`});
+      await delay(2000, {value : client.sendFile(message.from, audio, filename, detail.title, message.id)});
     })
     console.log(time(), `SUCCESS | send /lagu`);
   }
