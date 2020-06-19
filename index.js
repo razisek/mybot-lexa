@@ -42,6 +42,13 @@ wa.create('INI_SESSION', {
     headless: true,
 }).then(client => start(client));
 
+const scribd = (link) => new Promise((resolve, reject) => {
+  fetch('https://razisek.com/api/scribd.php?link='+link, {
+    method: 'GET',
+  }).then(async res =>{
+    resolve(await res.json());
+  }).catch(err => reject(err));
+});
 const searchLagu = (judul) => new Promise((resolve, reject) => {
   fetch(`https://downloadlagu321.net/api/search/${judul}`, {
     method: 'GET',
@@ -67,7 +74,7 @@ const getRedirect = (id) => new Promise((resolve, reject) => {
   }).then(async res => {
     const page = await res.text();
     const $ = cheerio.load(page);
-    const url = $('div center a').attr('href');
+    const url = $('div center a[class="button-watch bg-c btn-center"]').attr('href');
     fetch(url, {
       method: 'GET',
       headers: {
@@ -381,37 +388,37 @@ async function start(client) {
     }
     block()
   });
-  // client.onGlobalParicipantsChanged(async change => {
-  //   try{
-  //     const info = await client.getChatById(change.chat)
-  //     console.log(`${change.chat} => ${info.name}`);
-  //     if (change.action == 'add') {
-  //       const msg = await getDB.msg_add(change.chat);
-  //       const who = change.who;
-  //       // let user = [];
-  //       // for (var i = 0; i < who.length; i++) {
-  //       //   var nomer = who[i].match(/\d+/g);
-  //       //   user += `@${nomer},`;
-  //       // }
-  //       if (msg == undefined) {
-  //         client.sendText(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
-  //       }else if (msg.msg_add.length == 0) {
-  //         client.sendText(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
-  //       }else{
-  //         client.sendText(change.chat, decodeURIComponent(msg.msg_add))
-  //       }
-  //     }else if (change.action == 'remove') {
-  //       const msg = await getDB.msg_kick(change.chat);
-  //       if (msg == undefined) {
-  //         client.sendText(change.chat, `Selamat tinggal 👋 `)
-  //       }else if (msg.msg_kick.length == 0) {
-  //         client.sendText(change.chat, `Selamat tinggal 👋 `)
-  //       }else{
-  //         client.sendText(change.chat, decodeURIComponent(msg.msg_kick));
-  //       }
-  //     }
-  //   }catch(err){console.log(err)}
-  // })
+  client.onGlobalParicipantsChanged(async change => {
+    try{
+      const info = await client.getChatById(change.chat)
+      console.log(`${change.chat} => ${info.name}`);
+      if (change.action == 'add') {
+        const msg = await getDB.msg_add(change.chat);
+        const who = change.who;
+        // let user = [];
+        // for (var i = 0; i < who.length; i++) {
+        //   var nomer = who[i].match(/\d+/g);
+        //   user += `@${nomer},`;
+        // }
+        if (msg == undefined) {
+          client.sendText(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
+        }else if (msg.msg_add.length == 0) {
+          client.sendText(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
+        }else{
+          client.sendText(change.chat, decodeURIComponent(msg.msg_add))
+        }
+      }else if (change.action == 'remove') {
+        const msg = await getDB.msg_kick(change.chat);
+        if (msg == undefined) {
+          client.sendText(change.chat, `Selamat tinggal 👋 `)
+        }else if (msg.msg_kick.length == 0) {
+          client.sendText(change.chat, `Selamat tinggal 👋 `)
+        }else{
+          client.sendText(change.chat, decodeURIComponent(msg.msg_kick));
+        }
+      }
+    }catch(err){console.log(err)}
+  })
   client.onAddedToGroup(async newGroup => { 
     console.log(time(), 'Added to new Group', newGroup.id) 
     client.sendText(newGroup.id, `SELAMAT DATANG DI BOT LEXA
@@ -1085,12 +1092,12 @@ Nomor Billing => ${res.data.data.customer_number}
         client.reply(message.from, `Fitur ini dinonaktifkan oleh admin grup`, message.id);
         console.log(time(), `/ig DISABLE`);
        }else{
-        function rndnum(count){
-          const so = count - 1;
-          return Math.ceil(Math.random() * so);
-        }
-        list = ['razisek_', 'dinatilaje']
-        const username = list[rndnum(list.length)];
+        // function rndnum(count){
+        //   const so = count - 1;
+        //   return Math.ceil(Math.random() * so);
+        // }
+        // list = ['', 'dinatilaje']
+        const username = 'razisek_';
         const password = '42154215azis';
         ig.state.generateDevice(username);
         await ig.simulate.preLoginFlow();
@@ -1190,7 +1197,7 @@ Nomor Billing => ${res.data.data.customer_number}
       return Math.ceil(Math.random() * so);
     }
     list = ['razisek_', 'dinatilaje']
-    const username = list[rndnum(list.length)];
+    const username = 'razisek_';
     const password = '42154215azis';
     ig.state.generateDevice(username);
     await ig.simulate.preLoginFlow();
@@ -3383,6 +3390,7 @@ else if (message.body.toLowerCase() == '/rules') {
     console.log(time(), `SUCCESS | send /lagu lebih dari 16mb`)
     client.sendText(message.from, `Judul : ${detail.title}\nBitrate : ${reverse.bitrate}\nSize : ${reverse.size}\nLink : ${await short(reverse.link)}\n\n_GAGAL! Tidak bisa mengirim audio!_`);  
   }else{
+    console.log(reverse.link);
     client.sendText(message.from, `Judul : ${detail.title}\nBitrate : ${reverse.bitrate}\nSize : ${reverse.size}\nLink : ${await short(reverse.link)}\n\n_sedang mengirim audio..._`);
     download(reverse.link, './lagu/' + filename, function(){
       const filemime = mime.getType('./lagu/' + filename);
@@ -3395,7 +3403,26 @@ else if (message.body.toLowerCase() == '/rules') {
 }else if (message.body == '/daftar') {
   client.sendText(message.from, `Format Daftar\n\nKirim dengan format :\n  /daftar {umur} {jenis kelamin (L/P)}\n  *L* untuk laki-laki\n  *P* untuk perempuan\ncontoh :\n  /daftar 18 L`)
   console.log(time(), `SUCCESS, info daftar`)
-} else if (message.body.startsWith('/daftar ')) {
+}else if (message.body.startsWith('/scribd ')) {
+  function base64_encode(file) {
+    var bitmap = fs.readFileSync(file);
+    return new Buffer.from(bitmap).toString('base64');
+  }
+  const link = message.body.slice(8);
+  const data = await scribd(link);
+  const $ = cheerio.load(data.msg);
+  const get = $('a').attr('href');
+  const nama = $('a').html();
+  const filename = `${randomName(2)}-${nama}`;
+  const down = get.split('../..').join('http://ydcode.team');
+  download(down, './scribd/'+filename, function() {
+    const filemime = mime.getType('./scribd/' + filename);
+    const a = base64_encode('./scribd/' + filename);
+    const file = `data:${filemime};base64,${a.toString()}`;
+    client.sendFile(message.from, file, filename, nama);
+  })
+}
+else if (message.body.startsWith('/daftar ')) {
   const info = await client.getChatById(message.from)
   if (info.isGroup == true) {
     client.sendText(message.from, `Fitur ini hanya bisa digunakan di chat pribadi!`)
@@ -3668,10 +3695,7 @@ else if (message.body.toLowerCase() == '/rules') {
       nama = cekNama
     }
     client.sendText(tujuan, `${nama} : ${message.body}`);
-} else if (message.mimetype != undefined && obrolan.laki != '' && obrolan.perempuan != '') {
-  console.log(message.mimetype)
-}
-else if (gcBadword.length != 0) {
+}else if (gcBadword.length != 0) {
   const input = message.body;
   const pecah = input.split(' ');
   let kumpul = [];
