@@ -42,6 +42,20 @@ wa.create('INI_SESSION', {
     headless: true,
 }).then(client => start(client));
 
+function idYT(link){
+  const data = url.parse(link, true);
+  if (data.host == 'youtu.be') {
+    return data.path.split('/').join('');
+  }
+  return data.query.v;
+}
+const apiYT = (id) => new Promise((resolve, reject) => {
+  fetch(`https://invidio.us/api/v1/videos/${id}`, {
+    method: 'GET'
+  }).then(async res => {
+    resolve(await res.json());
+  }).catch(err => reject(err));
+});
 const scribd = (link) => new Promise((resolve, reject) => {
   fetch('https://razisek.com/api/scribd.php?link='+link, {
     method: 'GET',
@@ -1541,15 +1555,20 @@ vi: Vietnamese`)
           const cek_url = ['www.youtube.com', 'youtu.be', 'youtube.com', 'm.youtube.com']
 
           if (cek_url.includes(result.hostname) == true) {
-            const options = ['--username=user', '--password=hunter2']
-
-            youtubedl.getInfo(link, options, async function(err, info) {
-              if (err){
-                console.log(err)
+              const id = idYT(link);
+              const api = await apiYT(id);
+              const title = api.title;
+              const durasi = api.lengthSeconds;
+              const videoList = api.adaptiveFormats;
+              const streams = api.formatStreams;
+              const nganu = title.split('/').join('atau');
+              const filename = `${nganu}-${randomName(5)}.mp4`
+              const video = streams[0].url;
+              if (api.title == undefined){
+                console.log(time(), `FILED | video nt found`)
                 client.sendText(message.from, `Sepertinya video tidak ditemukan`);
               }else{
-                if (info._duration_raw >= 420) {
-                  const video = info.url;
+                if (durasi >= 420) {
                   const yt_url = new URL(video);
                   const cari = yt_url.searchParams;
                   const expire = cari.get('expire');
@@ -1569,15 +1588,15 @@ vi: Vietnamese`)
                   //   console.log(time(), 'SUCCESS | send video YOUTUBE (Lebih Dari 7 Menit)');
                   // })
                   const link = await short(video);
-                  client.sendText(message.from, `![SUCCESS]!\n\n{ ${info.title} }\n\nBut, Failed to send video more than 7 minutes\nDont worry, You can download manually\nLINK >>> ${link}\n[Note] : The link will expire on *${exp}*`);
+                  client.sendText(message.from, `![SUCCESS]!\n\n{ ${title} }\n\nBut, Failed to send video more than 7 minutes\nDont worry, You can download manually\nLINK >>> ${link}\n[Note] : The link will expire on *${exp}*`);
                   console.log(time(), 'SUCCESS | send video YOUTUBE (Lebih Dari 7 Menit)');
-                }else if (info._duration_raw <= 420) {
-                  const tiitle_file = info._filename;
+                }else if (durasi <= 420) {
+                  const tiitle_file = filename;
                   if (fs.existsSync('./youtube/' + tiitle_file)) {
                     client.sendText(message.from, `✅ Sukses Download, sedang mengirim video......`)
                     const a = base64_encode('./youtube/' + tiitle_file);
                     var base64str = 'data:video/mp4'+";base64,"+a.toString()
-                    await client.sendFile(message.from,base64str,tiitle_file, `Sukses Download\n\n${info.title}\nDuration : ${info.duration}`,null,true);
+                    await client.sendFile(message.from,base64str,tiitle_file, `Sukses Download\n\n${title}\nDuration : ${durasi}`,null,true);
                     console.log(time(), 'SUCCESS | download and send video YOUTUBE (Kurang dari 7 Menit)');
                   }else{
                     try{
@@ -1585,7 +1604,7 @@ vi: Vietnamese`)
                         client.sendText(message.from, `✅ Sukses Download, sedang mengirim video......`)
                         const a = base64_encode('./youtube/' + tiitle_file);
                         var base64str = 'data:video/mp4'+";base64,"+a.toString()
-                        await client.sendFile(message.from,base64str,tiitle_file, `Sukses Download\n\n${info.title}\nDuration : ${info.duration}`,null,true);
+                        await client.sendFile(message.from,base64str,tiitle_file, `Sukses Download\n\n${title}\nDuration : ${durasi}`,null,true);
                         console.log(time(), 'SUCCESS | download and send video YOUTUBE (Kurang dari 7 Menit)');
                       })
                     } catch(err){
@@ -1595,7 +1614,6 @@ vi: Vietnamese`)
                 }
               }
 
-            })
           }else{
             client.sendText(message.from, `*${link}* bukan link video dari YouTube`);
             console.log(time(), `FAILED | ${link} <= is not valid url YouTube`);
