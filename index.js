@@ -1596,17 +1596,17 @@ vi: Vietnamese`)
                   const tiitle_file = filename;
                   if (fs.existsSync('./youtube/' + tiitle_file)) {
                     client.sendText(message.from, `✅ Sukses Download, sedang mengirim video......`)
-                    const a = base64_encode('./youtube/' + tiitle_file);
-                    var base64str = 'data:video/mp4'+";base64,"+a.toString()
-                    await client.sendFile(message.from,base64str,tiitle_file, `Sukses Download\n\n${title}\nDuration : ${durasi}`,null,true);
+                    const a = await delay(2000, {value : base64_encode('./youtube/' + tiitle_file)});
+                    var base64str = await delay(2000, {value : 'data:video/mp4'+";base64,"+a.toString()})
+                    await delay(2000, {value : await client.sendFile(message.from,base64str,tiitle_file, `Sukses Download\n\n${title}\nDuration : ${durasi}`,null,true)});
                     console.log(time(), 'SUCCESS | download and send video YOUTUBE (Kurang dari 7 Menit)');
                   }else{
                     try{
-                      download(info.url, './youtube/' + tiitle_file , async function(){
+                      download(video, './youtube/' + tiitle_file , async function(){
                         client.sendText(message.from, `✅ Sukses Download, sedang mengirim video......`)
-                        const a = base64_encode('./youtube/' + tiitle_file);
-                        var base64str = 'data:video/mp4'+";base64,"+a.toString()
-                        await client.sendFile(message.from,base64str,tiitle_file, `Sukses Download\n\n${title}\nDuration : ${durasi}`,null,true);
+                        const a = await delay(2000, {value : base64_encode('./youtube/' + tiitle_file)});
+                        var base64str = await delay(2000, {value : 'data:video/mp4'+";base64,"+a.toString()})
+                        await delay(2000, {value : await client.sendFile(message.from,base64str,tiitle_file, `Sukses Download\n\n${title}\nDuration : ${durasi}`,null,true)});
                         console.log(time(), 'SUCCESS | download and send video YOUTUBE (Kurang dari 7 Menit)');
                       })
                     } catch(err){
