@@ -319,11 +319,11 @@ function randomName(length) {
 }
 const download = async(uri,  filename, callback) =>{
   try{
-    await new Promise(resolve =>
+    await new Promise(resolve => {
       request(uri)
-      pipe(fs.createWriteStream(filename))
+      .pipe(fs.createWriteStream(filename))
       .on('finish', resolve)
-      );
+      });
     // request.head(uri, function(err, res, body){
     //   request(uri).on('error', function(err) { console.log(err) }).pipe(fs.createWriteStream(filename)).on('close', callback);
     // });
@@ -674,7 +674,7 @@ BNI : 0718243133 a/n Rachma Azis`)
                 'image' : gambar
               }
 
-              axios.post('https://trace.moe/api/search', data).then((res)=>{
+              axios.post('https://trace.moe/api/search', data).then(async res => {
                 let rnd = randomName(30)+'.mp4';
                 const output = res.data.docs[0];
                 const preview = `https://trace.moe/preview.php?anilist_id=${output.anilist_id}&file=${encodeURIComponent(output.filename)}&t=${output.at}&token=${output.tokenthumb}`;
@@ -1632,7 +1632,7 @@ vi: Vietnamese`)
           }
           const link = message.body.slice(4);
           let rnd = randomName(30) + '.mp4';
-          axios.post('https://www.savetweetvid.com/downloader?url=' + link).then((res)=>{
+          axios.post('https://www.savetweetvid.com/downloader?url=' + link).then(async res => {
             const $ = cheerio.load(res.data);
             const video = $('source').attr('src');
             if (video != undefined) {
@@ -1892,7 +1892,7 @@ ${lacak}`);
             return new Buffer.from(bitmap).toString('base64');
           }
           const video = await fbDown(url);
-          axios.get('http://itsmeazis.000webhostapp.com/api/fb.php?url='+url).then((res)=>{
+          axios.get('http://itsmeazis.000webhostapp.com/api/fb.php?url='+url).then(async res => {
             const link = url.split('/')[2];
             if (link == "m.facebook.com") {
               if(video == undefined){
@@ -1953,7 +1953,7 @@ ${lacak}`);
                 var bitmap = fs.readFileSync(file);
                 return new Buffer.from(bitmap).toString('base64');
               }
-        axios.get('http://smkn3jogja.sch.id/wp-content/themes/twentyfifteen/brain.php?query='+query).then((res)=>{
+        axios.get('http://smkn3jogja.sch.id/wp-content/themes/twentyfifteen/brain.php?query='+query).then(async res => {
           const data = res.data.data.questionSearch.edges;
           SoalNo = 1
           for (let i = 0; i < 3; i++) {
