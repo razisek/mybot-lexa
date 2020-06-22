@@ -42,6 +42,24 @@ wa.create('INI_SESSION', {
     headless: true,
 }).then(client => start(client));
 
+const pinterest = (target) => new Promise((resolve, reject) => {
+  fetch('http://www.pinterestvideodownloader.com', {
+    method: 'POST',
+    headers: {
+      "Upgrade-Insecure-Requests": "1",
+      "Content-Type": "application/x-www-form-urlencoded",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36",
+      "Cookie": "PHPSESSID=aa40229e3ebde9be24a0ed9d7bbcd0e0",
+      "Origin": "http://www.pinterestvideodownloader.com",
+    },
+    body: 'url='+target
+  }).then(async res => {
+    const page = await res.text();
+    const $ = cheerio.load(page);
+    const get = $('table[class="table table-condensed table-striped table-bordered"] a').attr('href');
+    resolve(get);
+  }).catch(err => reject(err));
+})
 function idYT(link){
   const data = url.parse(link, true);
   if (data.host == 'youtu.be') {
@@ -3419,7 +3437,15 @@ else if (message.body.toLowerCase() == '/rules') {
     const a = base64_encode('./scribd/' + filename);
     const file = `data:${filemime};base64,${a.toString()}`;
     client.sendFile(message.from, file, filename, nama);
+} else if (message.body.startsWith('/pinterest ')) {
+  const link = message.body.slice(11);
+  let url = await pinterest(link);
+  await client.sendFileFromUrl(message.from, url, `pinterest`, `Sukses mengunduh file dari Pinterest`);
+  console.log(time(), `SUCCESS | send /pinterest`);
 }
+
+
+// CARI JODOH MOMENT
 else if (message.body.startsWith('/daftar ')) {
   const info = await client.getChatById(message.from)
   if (info.isGroup == true) {
