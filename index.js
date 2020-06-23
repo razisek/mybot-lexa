@@ -1530,7 +1530,8 @@ vi: Vietnamese`)
           const id = idYT(link);
           const api = await apiYT(id);
           const judul = api.title.split('/').join('atau');
-          const filename = `${judul}-${randomName(5)}.mp3`;
+          const getfilename = `${judul}-${randomName(5)}.mp3`;
+          const filename = getfilename.replace(/[<>:"/\|?*]/g,"");
           const direk = await getRedirect(id);
           const dataSesi = await getSessID(direk.redirect);
           const reverse = await getLinkmp3(direk.host, direk.path, dataSesi.session, dataSesi.secret);
@@ -1576,7 +1577,8 @@ vi: Vietnamese`)
               const videoList = api.adaptiveFormats;
               const streams = api.formatStreams;
               const nganu = title.split('/').join('atau');
-              const filename = `${nganu}-${randomName(5)}.mp4`
+              const getfilename = `${nganu}-${randomName(5)}.mp4`
+              const filename = getfilename.replace(/[<>:"/\|?*]/g,"");
               const video = streams[0].url;
               if (api.title == undefined){
                 console.log(time(), `FILED | video nt found`)
@@ -3400,7 +3402,8 @@ else if (message.body.toLowerCase() == '/rules') {
   }
   const judul = message.body.slice(6);
   const detail = await searchLagu(judul);
-  const filename = `${detail.title}-${randomName(5)}.mp3`;
+  const getfilename = `${detail.title}-${randomName(5)}.mp3`;
+  const filename = getfilename.replace(/[<>:"/\|?*]/g,"");
   const direk = await getRedirect(detail.id);
   const dataSesi = await getSessID(direk.redirect);
   const reverse = await getLinkmp3(direk.host, direk.path, dataSesi.session, dataSesi.secret);
