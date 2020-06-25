@@ -428,7 +428,7 @@ async function start(client) {
   client.onGlobalParicipantsChanged(async change => {
     try{
       const info = await client.getChatById(change.chat)
-      console.log(`${change.chat} => ${info.name}`);
+      console.log(`${change.action} => ${info.name}`);
       if (change.action == 'add') {
         const msg = await getDB.msg_add(change.chat);
         const who = change.who;
@@ -438,20 +438,27 @@ async function start(client) {
         //   user += `@${nomer},`;
         // }
         if (msg == undefined) {
-          client.sendText(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
+          client.sendTextWithMentions(change.chat, `Hey @${who},\n Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
         }else if (msg.msg_add.length == 0) {
-          client.sendText(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
+          client.sendTextWithMentions(change.chat, `Hey @${who},\n Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
         }else{
-          client.sendText(change.chat, decodeURIComponent(msg.msg_add))
+          let get_db = decodeURIComponent(msg.msg_add);
+          let nama = get_db.split('{nama}').join(`@${who}`);
+          let msg = nama.split('{grup}').join(info.name)
+          client.sendTextWithMentions(change.chat, msg)
         }
       }else if (change.action == 'remove') {
         const msg = await getDB.msg_kick(change.chat);
+        const who = change.who;
         if (msg == undefined) {
-          client.sendText(change.chat, `Selamat tinggal 👋 `)
+          client.sendTextWithMentions(change.chat, `@${who} telah keluar dari grub`);
         }else if (msg.msg_kick.length == 0) {
-          client.sendText(change.chat, `Selamat tinggal 👋 `)
+          client.sendTextWithMentions(change.chat, `@${who} telah keluar dari grub`);
         }else{
-          client.sendText(change.chat, decodeURIComponent(msg.msg_kick));
+          let get_db = decodeURIComponent(msg.msg_kick);
+          let nama = get_db.split('{nama}').join(`@${who}`);
+          let msg = nama.split('{grup}').join(info.name)
+          client.sendTextWithMentions(change.chat, msg);
         }
       }
     }catch(err){console.log(err)}
