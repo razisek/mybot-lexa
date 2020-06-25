@@ -432,18 +432,19 @@ async function start(client) {
       if (change.action == 'add') {
         const msg = await getDB.msg_add(change.chat);
         const who = change.who;
+        var target = who.match(/\d+/g);
         // let user = [];
         // for (var i = 0; i < who.length; i++) {
         //   var nomer = who[i].match(/\d+/g);
         //   user += `@${nomer},`;
         // }
         if (msg == undefined) {
-          client.sendTextWithMentions(change.chat, `Hey @${who},\n Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
+          client.sendTextWithMentions(change.chat, `Hey @${target},\n Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
         }else if (msg.msg_add.length == 0) {
-          client.sendTextWithMentions(change.chat, `Hey @${who},\n Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
+          client.sendTextWithMentions(change.chat, `Hey @${target},\n Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
         }else{
           const get_db = decodeURIComponent(msg.msg_add);
-          const nama = get_db.split('{nama}').join(`@${who}`);
+          const nama = get_db.split('{nama}').join(`@${target}`);
           const pesan = nama.split('{grup}').join(info.name);
           console.log(pesan);
           client.sendTextWithMentions(change.chat, pesan);
@@ -451,13 +452,14 @@ async function start(client) {
       }else if (change.action == 'remove') {
         const msg = await getDB.msg_kick(change.chat);
         const who = change.who;
+        var target = who.match(/\d+/g);
         if (msg == undefined) {
-          client.sendTextWithMentions(change.chat, `@${who} telah keluar dari grub`);
+          client.sendTextWithMentions(change.chat, `@${target} telah keluar dari grub`);
         }else if (msg.msg_kick.length == 0) {
-          client.sendTextWithMentions(change.chat, `@${who} telah keluar dari grub`);
+          client.sendTextWithMentions(change.chat, `@${target} telah keluar dari grub`);
         }else{
           const get_db = decodeURIComponent(msg.msg_kick);
-          const nama = get_db.split('{nama}').join(`@${who}`);
+          const nama = get_db.split('{nama}').join(`@${target}`);
           const pesan = nama.split('{grup}').join(info.name);
           console.log(pesan);
           client.sendTextWithMentions(change.chat, pesan);
