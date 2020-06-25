@@ -444,8 +444,9 @@ async function start(client) {
         }else{
           const get_db = decodeURIComponent(msg.msg_add);
           const nama = get_db.split('{nama}').join(`@${who}`);
-          const pesan = nama.split('{grup}').join(info.name)
-          client.sendTextWithMentions(change.chat, pesan)
+          const pesan = nama.split('{grup}').join(info.name);
+          console.log(pesan);
+          client.sendTextWithMentions(change.chat, pesan);
         }
       }else if (change.action == 'remove') {
         const msg = await getDB.msg_kick(change.chat);
@@ -457,7 +458,8 @@ async function start(client) {
         }else{
           const get_db = decodeURIComponent(msg.msg_kick);
           const nama = get_db.split('{nama}').join(`@${who}`);
-          const pesan = nama.split('{grup}').join(info.name)
+          const pesan = nama.split('{grup}').join(info.name);
+          console.log(pesan);
           client.sendTextWithMentions(change.chat, pesan);
         }
       }
