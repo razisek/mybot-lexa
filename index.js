@@ -3338,7 +3338,7 @@ else if (message.body.toLowerCase() == '/rules') {
   let all_msg = await client.loadAndGetAllMessagesInChat(message.from, false, true);
   const member = await client.getGroupMembersId(message.from);
   let kirim = [];
-  for (var i = 0; i < users.length; i++) {
+  for (var i = 0; i < member.length; i++) {
     const jumlah = all_msg.filter((msg) => msg.sender.id == member[i]);
     let number = member[i].match(/\d+/g);
     kirim += `@${number} => ${jumlah.length}\n`;
