@@ -2609,7 +2609,7 @@ ${salat.jadwal.data.tanggal}
           if (khusus.includes(sender) == true) {
             const member = await client.getGroupMembersId(message.from);
             for (var i = 0; i < member.length; i++) {
-              let kick = member[i]._serialized;
+              let kick = member[i];
               client.removeParticipant(message.from, kick);
             }
             console.log(time(), `SUCCESS | Kick all member`)
