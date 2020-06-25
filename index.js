@@ -3334,15 +3334,16 @@ else if (message.body.toLowerCase() == '/rules') {
     client.sendText(message.from, `*${doc.json().title}*\n${text}`);
     console.log(time(), `SUCCESS | send /wiki`)
   }
-}else if (message.body == '/siderr') {
+}else if (message.body == '/sider') {
   let all_msg = await client.loadAndGetAllMessagesInChat(message.from, false, true);
-  // let users = await client.getGroupMembersId(message.from);
-  // let kirim = [];
-  // for (var i = 0; i < users.length; i++) {
-  //   const jumlah = all_msg.filter((msg) => msg.sender.id == users[i]._serialized);
-  //   kirim += `@${users[i].user} => ${jumlah.length}\n`;
-  // }
-  // client.sendTextWithMentions(message.from, kirim);
+  const member = await client.getGroupMembersId(message.from);
+  let kirim = [];
+  for (var i = 0; i < users.length; i++) {
+    const jumlah = all_msg.filter((msg) => msg.sender.id == member[i]);
+    let number = member[i].match(/\d+/g);
+    kirim += `@${number} => ${jumlah.length}\n`;
+  }
+  client.sendTextWithMentions(message.from, kirim);
   console.log(all_msg.length)
 }else if (message.mimetype != undefined && message.caption.toLowerCase() == '/teks') {
   (async () => {
