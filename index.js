@@ -426,9 +426,9 @@ async function start(client) {
         //   user += `@${nomer},`;
         // }
         if (msg == undefined) {
-          client.sendTextWithMentions(change.chat, `Hey @${target},\n Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
+          client.sendTextWithMentions(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
         }else if (msg.msg_add.length == 0) {
-          client.sendTextWithMentions(change.chat, `Hey @${target},\n Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
+          client.sendTextWithMentions(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
         }else{
           const get_db = decodeURIComponent(msg.msg_add);
           const nama = get_db.split('{nama}').join(`@${target}`);
@@ -2494,7 +2494,7 @@ ${salat.jadwal.data.tanggal}
         }
       }catch(err){}
     })();
-}else if (message.body.toLowerCase().split(" ").find(word => word === "@all") == "@all") {
+}else if (message.from == '6289658797209-1514192102@g.us' && message.body.toLowerCase().split(" ").find(word => word === "@all") == "@all") {
   (async () => {
     const member = await client.getGroupMembersId(message.from);
     let tag = [];
@@ -2650,7 +2650,7 @@ ${salat.jadwal.data.tanggal}
             return Math.ceil(Math.random() * so);
           }
 
-          const list_target = ['diankhr', 'parahhhshit', 'thisfandacfl', 'kindabells', 'olivepurpledj', 'inisampekapan', 'mynameismei_', 'athayags26', 'vinaaamrina', 'cahyanirynn', 'yoeourophia', 'alifhiaf', 'dvnovira', 'eline.angeline', 'felicyangelista', 'reemarmartin', 'pricilia_micca', 'sellaaselly16', 'akuansellma', 'regitaechaa', 'najwashivaa02'];
+          const list_target = ['queenyytan', 'shandrabahari', 'ekkaprnm', 'diankhr', 'parahhhshit', 'thisfandacfl', 'kindabells', 'olivepurpledj', 'inisampekapan', 'mynameismei_', 'athayags26', 'vinaaamrina', 'cahyanirynn', 'yoeourophia', 'alifhiaf', 'dvnovira', 'eline.angeline', 'felicyangelista', 'reemarmartin', 'pricilia_micca', 'sellaaselly16', 'akuansellma', 'regitaechaa', 'najwashivaa02'];
           const target = list_target[rndnum(list_target.length)];
           (async () => {
             try {
