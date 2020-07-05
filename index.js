@@ -373,19 +373,6 @@ const mode_ptl = () => new Promise((resolve, reject) => {
     reject(err);
   })
 });
-const mode_nutrisi = () => new Promise((resolve, reject) => {
-  fetch('http://apimybot.000webhostapp.com/mode/nutrisi.php?mode=nutrisi&update=', {
-    method: 'GET',
-    timeout: 5000
-  }).then(async res => {
-    const result = {
-      body : await res.json()
-    }
-    resolve(result.body.status)
-  }).catch(err => {
-    reject(err);
-  })
-});
 const cek_disable =(id, fitur) => new Promise((resolve, reject) => {
   fetch('http://apimybot.000webhostapp.com/mode/fitur/disable.php?id='+id+'&fitur='+fitur+'&action=', {
     method: 'GET',
@@ -665,25 +652,7 @@ BNI : 0718243133 a/n Rachma Azis`)
           }else{console.log('')}
         }catch(err){console.log(err)}
       })();
-    }else if(message.mimetype != undefined && message.from == '6289602957427-1580006842@g.us'){
-      (async() => {
-        try{
-          const tmode = await cek_nutrisi();
-          if (tmode.length != 0) {
-            const filename = `${message.t}.jpeg`;
-            const mediaData = await wa.decryptMedia(message, uaOverride);
-            fs.writeFile('./nutrisi/'+filename, mediaData, function(err) {
-              if (err) {
-                return console.log(err);
-              }
-              console.log(`The file was saved!\n${filename}`);
-              client.sendText(message.from, `saved to NUTRISI`);
-            });
-          }else{console.log('')}
-        }catch(err){console.log(err)}
-      })();
-    }
-    else if(message.mimetype != undefined && message.caption.toLowerCase() == '/wait'){
+    }else if(message.mimetype != undefined && message.caption.toLowerCase() == '/wait'){
       (async () => {
         try {
           const disable = await getDB.cek_disable(message.from, '/wait');
@@ -824,14 +793,13 @@ BNI : 0718243133 a/n Rachma Azis`)
   (async() => {
     const totalBacot = await getDB.count_bacot();
     const dbptl = fs.readdirSync('./ptl');
-    const dbnutrisi = fs.readdirSync('./nutrisi');
     const dbtiktok = fs.readdirSync('./tiktok');
     const dbquote = '493'
     client.sendText(message.from, `*BOT LEXA*
 
 Author : azisek_
 Build : 27-01-2020
-Last Update : 21-05-2020
+Last Update : 06-07-2020
 contact : wa.me/6289602957427
 
 *Database*
@@ -839,8 +807,7 @@ contact : wa.me/6289602957427
 ptl : ${dbptl.length}
 tiktok : ${dbtiktok.length}
 bacot : ${totalBacot}
-quote : ${dbquote}
-nutrisi : ${dbnutrisi.length}`);
+quote : ${dbquote}`);
   console.log(time(), "SUCCESS | send #about");
   })();  
 }else if (message.body == '#cekresi') {
@@ -1327,32 +1294,6 @@ Nomor Billing => ${res.data.data.customer_number}
       }
     }
   }
-}else if (message.body.toLowerCase() == '/nutrisi') {
-  (async () => {
-      try {
-        const disable = await getDB.cek_disable(message.from, '/nutrisi');
-       if (disable != 0) {
-        client.reply(message.from, `Fitur ini dinonaktifkan oleh admin grup`, message.id);
-        console.log(time(), `/nutris DISABLE`);
-       }else{
-        function base64_encode(file) {
-          var bitmap = fs.readFileSync(file);
-          return new Buffer.from(bitmap).toString('base64');
-        }
-        var dir = 'nutrisi';
-        glob(dir + '/*.*', function(err, files) {
-          var file = files[Math.floor(Math.random() * files.length)]
-          const a = base64_encode(file);
-          var base64str = 'data:image/jpeg'+";base64,"+a.toString()
-          client.sendImage(message.from,base64str,file, `yummy 😋😛`);
-          console.log(time(), "SUCCESS | send /nutrisi");
-        }).catch(err => {
-          console.log(err)
-          client.sendText(message.from, `aku juga kurang nutrisi nih ☹️`);
-        });
-      }
-    }catch(err){}
-  })();
 }else if (message.body.toLowerCase().startsWith('/lirik ')) {
   (async () => {
         try {
@@ -2881,7 +2822,7 @@ Menerima donasi berapapun jumlahnya 🙏 Terima Kasih `);
   console.log(time(), `SUCCESS | send #donasi`)
 }else if (message.body.toLowerCase().startsWith('!disable ')) {
   const menu = message.body.slice(9);
-  const list = ['/teks', '/wiki', '/newstoday', '/igs', '/nutrisi', '/corona', '/nh', '/quote', '/quoteit', '/bacot', '/add', '/mock', '/ptl', '/brainly', '/lirik', '/tr', '/tts', '/cuaca', '/salat', '/yt', '/ytmp3', '/tw', '/fb', '/ig', '/indihome', '/pln', '/sticker', '/wait', '/tiktok'];
+  const list = ['/teks', '/wiki', '/newstoday', '/igs', '/corona', '/nh', '/quote', '/quoteit', '/bacot', '/add', '/mock', '/ptl', '/brainly', '/lirik', '/tr', '/tts', '/cuaca', '/salat', '/yt', '/ytmp3', '/tw', '/fb', '/ig', '/indihome', '/pln', '/sticker', '/wait', '/tiktok'];
     (async () => {
     try{
       const info = await client.getChatById(message.from)
@@ -2912,7 +2853,7 @@ Menerima donasi berapapun jumlahnya 🙏 Terima Kasih `);
   })();
 }else if (message.body.toLowerCase().startsWith('!enable ')) {
   const menu = message.body.slice(8);
-  const list = ['/teks', '/wiki', '/newstoday', '/igs', '/nutrisi', '/corona', '/nh', '/quote', '/quoteit', '/bacot', '/add', '/mock', '/ptl', '/brainly', '/lirik', '/tr', '/tts', '/cuaca', '/salat', '/yt', '/ytmp3', '/tw', '/fb', '/ig', '/indihome', '/pln', '/sticker', '/wait', '/tiktok'];
+  const list = ['/teks', '/wiki', '/newstoday', '/igs', '/corona', '/nh', '/quote', '/quoteit', '/bacot', '/add', '/mock', '/ptl', '/brainly', '/lirik', '/tr', '/tts', '/cuaca', '/salat', '/yt', '/ytmp3', '/tw', '/fb', '/ig', '/indihome', '/pln', '/sticker', '/wait', '/tiktok'];
   (async () => {
     try{
       const info = await client.getChatById(message.from)
