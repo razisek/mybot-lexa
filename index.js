@@ -1529,7 +1529,7 @@ vi: Vietnamese`)
               const videoList = api.adaptiveFormats;
               const streams = api.formatStreams;
               const nganu = title.split('/').join('atau');
-              const getfilename = `${nganu}-${randomName(5)}.mp4`
+              const getfilename = `${nganu}-${randomName(5)}.mp4`;
               const filename = getfilename.replace(/[<>:"/\|?*]/g,"");
               const video = streams[0].url;
               if (api.title == undefined){
@@ -3275,7 +3275,7 @@ else if (message.body.toLowerCase() == '/rules') {
     client.sendText(message.from, `*${doc.json().title}*\n${text}`);
     console.log(time(), `SUCCESS | send /wiki`)
   }
-}else if (message.body == '/sider') {
+}else if (message.body == '/siderrrr') {
   let all_msg = await client.loadAndGetAllMessagesInChat(message.from, false, true);
   const member = await client.getGroupMembersId(message.from);
   let kirim = [];
