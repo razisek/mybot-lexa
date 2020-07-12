@@ -1901,7 +1901,7 @@ ${lacak}`);
               const video = res.data.links['Download High Quality'];
               const videoSD = res.data.links['Download Low Quality'];
               try{
-                await download(video, './facebook/' + rnd, function(){
+                await download(video, './facebook/' + rnd, async function(){
                   const a = base64_encode('./facebook/' + rnd);
                   var base64str = 'data:video/mp4'+";base64,"+a.toString()
                   client.sendFile(message.from, base64str, rnd, `sukses download! from *Facebook*\nHD : ${await short(video)}\nSD : ${await short(videoSD)}`);
