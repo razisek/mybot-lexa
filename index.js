@@ -1503,7 +1503,7 @@ vi: Vietnamese`)
             const audio = await delay(2000, {value : 'data:audio/mp4'+";base64,"+a.toString()})
             await delay(2000, {value : await client.sendFile(message.from, audio, filename, filename, message.id, true)});
           }else{
-          await download(reverse.link, './ytmp3/'+filename, function(){
+          await download(reverse.link, './ytmp3/'+filename, async function(){
             const a = await delay(2000, {value : base64_encode('./ytmp3/' + filename)});
             const audio = await delay(2000, {value : 'data:audio/mp4'+";base64,"+a.toString()})
             await delay(2000, {value : await client.sendFile(message.from, audio, filename, filename, message.id, true)});
@@ -1580,7 +1580,7 @@ vi: Vietnamese`)
                     console.log(time(), 'SUCCESS | download and send video YOUTUBE (Kurang dari 7 Menit)');
                   }else{
                     try{
-                      await download(video, './youtube/' + tiitle_file , function(){
+                      await download(video, './youtube/' + tiitle_file ,async function(){
                         client.sendText(message.from, `✅ Sukses Download, sedang mengirim video......`)
                         const a = await delay(2000, {value : base64_encode('./youtube/' + tiitle_file)});
                         var base64str = await delay(2000, {value : 'data:video/mp4'+";base64,"+a.toString()})
@@ -3280,7 +3280,7 @@ else if (message.body.toLowerCase() == '/rules') {
   const rnd = 'sticker_'+id+randomName(5);
   const link = `https://sdl-stickershop.line.naver.jp/stickershop/v1/product/${id}/iphone/stickers@2x.zip`;
   const path = './line/' + rnd+'.zip';
-  await download(link, path, function(){
+  await download(link, path, async function(){
     fs.createReadStream(path).pipe(unzipper.Extract({ path: './stiker/'+rnd }));
     
     const query = await delay(2000, {value: './stiker/'+ rnd + '/**/*.png'});
@@ -3401,7 +3401,7 @@ else if (message.body.toLowerCase() == '/rules') {
     client.sendText(message.from, `Judul : ${detail.title}\nBitrate : ${reverse.bitrate}\nSize : ${reverse.size}\nLink : ${await short(reverse.link)}\n\n_GAGAL! Tidak bisa mengirim audio!_`);  
   }else{
     client.sendText(message.from, `Judul : ${detail.title}\nBitrate : ${reverse.bitrate}\nSize : ${reverse.size}\nLink : ${await short(reverse.link)}\n\n_sedang mengirim audio..._`);
-    await download(reverse.link, './lagu/' + filename, function(){
+    await download(reverse.link, './lagu/' + filename, async function(){
       const filemime = await delay(2000, {value : mime.getType('./lagu/' + filename)});
       const a = await delay(2000, {value : base64_encode('./lagu/' + filename)});
       const audio = await delay(2000, {value : `data:${filemime};base64,${a.toString()}`});
