@@ -337,14 +337,14 @@ function randomName(length) {
 }
 const download = async(uri,  filename, callback) =>{
   try{
-    await new Promise(resolve => {
-      request(uri)
-      .pipe(fs.createWriteStream(filename))
-      .on('finish', resolve)
-      });
-    // request.head(uri, function(err, res, body){
-    //   request(uri).on('error', function(err) { console.log(err) }).pipe(fs.createWriteStream(filename)).on('close', callback);
-    // });
+    // await new Promise(resolve => {
+    //   request(uri)
+    //   .pipe(fs.createWriteStream(filename))
+    //   .on('finish', resolve)
+    //   });
+    request.head(uri, function(err, res, body){
+      request(uri).on('error', function(err) { console.log(err) }).pipe(fs.createWriteStream(filename)).on('close', callback);
+    });
   }catch(err){
     console.log(err)
   }
@@ -677,13 +677,14 @@ BNI : 0718243133 a/n Rachma Azis`)
                 const output = res.data.docs[0];
                 const preview = `https://trace.moe/preview.php?anilist_id=${output.anilist_id}&file=${encodeURIComponent(output.filename)}&t=${output.at}&token=${output.tokenthumb}`;
                 const capt = `\nTitle Original : *${output.title}*\nTitle in English : *${output.title_english}*\nEpisode : *${output.episode}*\nSeason : *${output.season}*\n`; 
-                await download(preview, './wait/' + rnd);
+                await download(preview, './wait/' + rnd, function(){
 
                 const a = base64_encode('./wait/' + rnd);
                 var base64str = 'data:video/mp4' + ";base64," + a.toString()
                 client.sendFile(message.from, base64str, rnd, capt);
                 console.log(time(), `SUCCESS | send /wait What Anime Is This`)
-                console.log(output);
+                // console.log(output);
+                });
               })
             }catch(err){console.log(err)}
           }
@@ -1148,10 +1149,11 @@ Nomor Billing => ${res.data.data.customer_number}
                 let rnd = randomName(30) + '.mp4';
                 var video = slide[i].video_versions[0].url;
                 try{
-                  await download(video, './instagram/' + rnd);
+                  await download(video, './instagram/' + rnd, function(){
                   const a = base64_encode('./instagram/' + rnd);
                   var base64str = 'data:video/mp4'+";base64,"+a.toString()
                   client.sendFile(message.from,base64str,rnd, '');
+                });
                 } catch(err){
                   console.log(err)
                 }
@@ -1159,10 +1161,11 @@ Nomor Billing => ${res.data.data.customer_number}
                 let rndi = randomName(30) + '.png';
                 var foto = slide[i].image_versions2.candidates[0].url;
                 try{
-                  await download(foto, './instagram/' + rndi);
+                  await download(foto, './instagram/' + rndi, function(){
                   const a = base64_encode('./instagram/' + rndi);
                   var base64str = 'data:image/jpeg'+";base64,"+a.toString()
                   client.sendImage(message.from,base64str,rndi, '');
+                });
                 } catch(err){
                   console.log(err)
                 };
@@ -1174,11 +1177,12 @@ Nomor Billing => ${res.data.data.customer_number}
             var video = post.items[0].video_versions[0].url;
             var durasi = post.items[0].video_duration;
             try{
-              await download(video, './instagram/' + rnd);
+              await download(video, './instagram/' + rnd, function(){
               const a = base64_encode('./instagram/' + rnd);
               var base64str = 'data:video/mp4'+";base64,"+a.toString()
               client.sendFile(message.from,base64str,rnd, `sukses download!\nFrom : @` + user + '\nDuration : ' + durasi + 's');
               console.log(time(), 'SUCCESS | download media from INSTAGRAM');
+            });
             } catch(err){
               console.log(err)
             };
@@ -1186,11 +1190,12 @@ Nomor Billing => ${res.data.data.customer_number}
             var rnd = randomName(30) + '.png';
             var foto = post.items[0].image_versions2.candidates[0].url;
             try{
-              await download(foto, './instagram/' + rnd);
+              await download(foto, './instagram/' + rnd, function(){
               const a = base64_encode('./instagram/' + rnd);
               var base64str = 'data:image/jpeg'+";base64,"+a.toString()
               client.sendImage(message.from,base64str,rnd, `sukses download!\nFrom : @` + user);
               console.log(time(), 'SUCCESS | download media from INSTAGRAM');
+            });
             } catch(err){
               console.log(err)
             };
@@ -1236,17 +1241,19 @@ Nomor Billing => ${res.data.data.customer_number}
           if(ricek == 2){
             let rnd = randomName(30) + '.mp4';
             var video = more[i].video_versions[0].url;
-            await download(video, './instagram/' + rnd);
+            await download(video, './instagram/' + rnd, function(){
             const a = base64_encode('./instagram/' + rnd);
             var base64str = 'data:video/mp4'+";base64,"+a.toString()
             client.sendFile(message.from,base64str,rnd, '');
+          });
           }else if (ricek == 1){
             let rndi = randomName(30) + '.png';
             var foto = more[i].image_versions2.candidates[0].url;
-            await download(foto, './instagram/' + rndi);
+            await download(foto, './instagram/' + rndi, function(){
             const a = base64_encode('./instagram/' + rndi);
             var base64str = 'data:image/jpeg'+";base64,"+a.toString();
             client.sendImage(message.from,base64str,rndi, '');
+          });
           }
         }
         console.log(time(), `SUCCESS | download story instagram`)
@@ -1257,17 +1264,19 @@ Nomor Billing => ${res.data.data.customer_number}
           if(ricek == 2){
             let rnd = randomName(30) + '.mp4';
             var video = more[i].video_versions[0].url;
-            await download(video, './instagram/' + rnd);
+            await download(video, './instagram/' + rnd, function(){
             const a = base64_encode('./instagram/' + rnd);
             var base64str = 'data:video/mp4'+";base64,"+a.toString();
             client.sendFile(message.from,base64str,rnd, '');
+          });
           }else if (ricek == 1){
             let rndi = randomName(30) + '.png';
             var foto = more[i].image_versions2.candidates[0].url;
-            await download(foto, './instagram/' + rndi);
+            await download(foto, './instagram/' + rndi, function(){
               const a = base64_encode('./instagram/' + rndi);
               var base64str = 'data:image/jpeg'+";base64,"+a.toString()
               client.sendImage(message.from,base64str,rndi, '');
+            });
           }
         }
         console.log(time(), `SUCCESS | download story instagram`)
@@ -1278,19 +1287,21 @@ Nomor Billing => ${res.data.data.customer_number}
       if(cek_media == 2){
         let rnd = randomName(30) + '.mp4';
         var video = more[ke].video_versions[0].url;
-        await download(video, './instagram/' + rnd);
+        await download(video, './instagram/' + rnd, function(){
           const a = base64_encode('./instagram/' + rnd);
           var base64str = 'data:video/mp4'+";base64,"+a.toString()
           client.sendFile(message.from,base64str,rnd,`Berhasil mengunduh cerita dari @${pecah[0]} ke-${pecah[1]}`);
           console.log(time(), `SUCCESS | download story instagram`)
+        });
       }else if (cek_media == 1){
         let rndi = randomName(30) + '.png';
         var foto = more[ke].image_versions2.candidates[0].url;
-        await download(foto, './instagram/' + rndi);
+        await download(foto, './instagram/' + rndi, function(){
           const a = base64_encode('./instagram/' + rndi);
           var base64str = 'data:image/jpeg'+";base64,"+a.toString()
           client.sendImage(message.from,base64str,rndi, `Berhasil mengunduh cerita dari @${pecah[0]} ke-${pecah[1]}`);
           console.log(time(), `SUCCESS | download story instagram`)
+        });
       }
     }
   }
@@ -1492,10 +1503,11 @@ vi: Vietnamese`)
             const audio = await delay(2000, {value : 'data:audio/mp4'+";base64,"+a.toString()})
             await delay(2000, {value : await client.sendFile(message.from, audio, filename, filename, message.id, true)});
           }else{
-          await download(reverse.link, './ytmp3/'+filename);
+          await download(reverse.link, './ytmp3/'+filename, function(){
             const a = await delay(2000, {value : base64_encode('./ytmp3/' + filename)});
             const audio = await delay(2000, {value : 'data:audio/mp4'+";base64,"+a.toString()})
             await delay(2000, {value : await client.sendFile(message.from, audio, filename, filename, message.id, true)});
+          });
         }
           console.log(time(), `SUCCESS | send /ytmp3`)
         }
@@ -1568,12 +1580,13 @@ vi: Vietnamese`)
                     console.log(time(), 'SUCCESS | download and send video YOUTUBE (Kurang dari 7 Menit)');
                   }else{
                     try{
-                      await download(video, './youtube/' + tiitle_file );
+                      await download(video, './youtube/' + tiitle_file , function(){
                         client.sendText(message.from, `✅ Sukses Download, sedang mengirim video......`)
                         const a = await delay(2000, {value : base64_encode('./youtube/' + tiitle_file)});
                         var base64str = await delay(2000, {value : 'data:video/mp4'+";base64,"+a.toString()})
                         await delay(2000, {value : await client.sendFile(message.from,base64str,tiitle_file, `Sukses Download\n\n${title}\nDuration : ${durasi}`,null,true)});
                         console.log(time(), 'SUCCESS | download and send video YOUTUBE (Kurang dari 7 Menit)');
+                      });
                     } catch(err){
                       console.log(err)
                     };
@@ -1609,10 +1622,11 @@ vi: Vietnamese`)
             const video = $('source').attr('src');
             if (video != undefined) {
               try{
-                await download(video, './twitter/' + rnd);
+                await download(video, './twitter/' + rnd, function(){
                   const a = base64_encode('./twitter/' + rnd);
                   var base64str = 'data:video/mp4'+";base64,"+a.toString()
                   client.sendFile(message.from,base64str,rnd, 'sukses download! from *Twitter*');
+                });
               } catch(err){
                 console.log(err)
               };
@@ -1872,11 +1886,12 @@ ${lacak}`);
                 console.log(time(), 'FAILED | media video tidak ditemukan')
               }else{
                 var rnd = randomName(30) + '.mp4';
-                await download(video, './facebook/' + rnd);
+                await download(video, './facebook/' + rnd, function(){
                   const a = base64_encode('./facebook/' + rnd);
                   var base64str = 'data:video/mp4'+";base64,"+a.toString()
                   client.sendFile(message.from, base64str, rnd, 'sukses download! from *Facebook*');
                   console.log(time(), 'SUCCESS | download media from FACEBOOK');
+                });
               }
             }else if (res.data.links == undefined) {
               client.sendText(message.from, "Tidak dapat menemukan video!, Sepertinya video tidak untuk publik")
@@ -1886,11 +1901,12 @@ ${lacak}`);
               const video = res.data.links['Download High Quality'];
               const videoSD = res.data.links['Download Low Quality'];
               try{
-                await download(video, './facebook/' + rnd);
+                await download(video, './facebook/' + rnd, function(){
                   const a = base64_encode('./facebook/' + rnd);
                   var base64str = 'data:video/mp4'+";base64,"+a.toString()
                   client.sendFile(message.from, base64str, rnd, `sukses download! from *Facebook*\nHD : ${await short(video)}\nSD : ${await short(videoSD)}`);
                   console.log(time(), 'SUCCESS | download media from FACEBOOK');
+                });
               }catch(err){
                 console.log(err)
               }
@@ -1898,11 +1914,12 @@ ${lacak}`);
               var rnd = randomName(30) + '.mp4';
               const video = res.data.links['Download Low Quality'];
               try{
-                await download(video, './facebook/' + rnd);
+                await download(video, './facebook/' + rnd, function(){
                   const a = base64_encode('./facebook/' + rnd);
                   var base64str = 'data:video/mp4'+";base64,"+a.toString()
                   client.sendFile(message.from, base64str, rnd, `sukses download! from *Facebook*\nHD : unavailable\nSD : ${await short(video)}`);
                   console.log(time(), 'SUCCESS | download media from FACEBOOK');
+                });
               }catch(err){
                 console.log(err)
               }
@@ -1952,17 +1969,19 @@ ${lacak}`);
               const gambar = data[i].node.attachments[0].url;
               if (data[i].node.answers.nodes[0].attachments[0] == undefined) {
                 let rnd = randomName(30)+'.jpg';
-                await download(gambar, './brainly/'+rnd);
+                await download(gambar, './brainly/'+rnd, function(){
                   const a = base64_encode('./brainly/' + rnd);
                   var base64str = 'data:image/jpeg'+";base64,"+a.toString()
                   client.sendImage(message.from,base64str,rnd,`*${SoalNo}.* ${soalan}\n\nJawaban :\n\n${jawaban}`);
+                });
               }else{
                 const lamp = data[i].node.answers.nodes[0].attachments[0].url;
                 let rndi = randomName(30)+'.jpg';
-                await download(gambar, './brainly/'+rndi);
+                await download(gambar, './brainly/'+rndi, function(){
                   const a = base64_encode('./brainly/' + rndi);
                   var base64str = 'data:image/jpeg'+";base64,"+a.toString()
                   client.sendImage(message.from,base64str,rndi,`*${SoalNo}.* ${soalan}\n\nJawaban :\n\n${jawaban}\n*Gambar Terlampir* : ${lamp}`);
+                });
               }
             }
             SoalNo ++
@@ -2669,11 +2688,12 @@ ${salat.jadwal.data.tanggal}
                 const url = `https://www.tiktok.com/@${user}/video/${data.id}`;
                 const hd = await tiktok_hd(url);
                 // const hd = 'unavailable';
-                await download(noWm, './tiktok/'+filename);
+                await download(noWm, './tiktok/'+filename, function(){
                     const a = base64_encode('./tiktok/' + filename);
                     var base64str = 'data:video/mp4'+";base64,"+a.toString()
                     client.sendFile(message.from, base64str, filename, `source : @${user}\nmusic : ${music}\nHD video : ${hd}`);
                     console.log(time(), `SUCCESS | send /tiktok random`)
+                  });
               }
             } catch (error) {
               console.log(error);
@@ -2713,11 +2733,12 @@ ${salat.jadwal.data.tanggal}
                 const noWm = await videoNoWm(video);
                 const url = `https://www.tiktok.com/@${user}/video/${meta.id}`;
                 const hd = await tiktok_hd(url);
-                await download(noWm, './tiktok/'+filename);
+                await download(noWm, './tiktok/'+filename, function(){
                   const a = base64_encode('./tiktok/' + filename);
                   var base64str = 'data:video/mp4'+";base64,"+a.toString()
                   client.sendFile(message.from, base64str, filename, `source : @${user}\nmusic : ${music}\nHD video : ${hd}`);
                   console.log(time(), `SUCCESS | send /tiktok tertarget link`)
+                });
               } catch (error) {
                 console.log(error);
               }
@@ -2738,11 +2759,12 @@ ${salat.jadwal.data.tanggal}
                   const url = `https://www.tiktok.com/@${user}/video/${data.id}`;
                   const hd = await tiktok_hd(url);
                   // const hd = 'unavailable';
-                  await download(noWm, './tiktok/'+filename);
+                  await download(noWm, './tiktok/'+filename, function(){
                     const a = base64_encode('./tiktok/' + filename);
                     var base64str = 'data:video/mp4'+";base64,"+a.toString()
                     client.sendFile(message.from, base64str, filename, `source : @${user}\nmusic : ${music}\nHD video : ${hd}`);
                     console.log(time(), `SUCCESS | send /tiktok tertarget ${user}`)
+                  });
                 }
               } catch (error) {
                 console.log(error);
@@ -3226,11 +3248,12 @@ else if (message.body.toLowerCase() == '/rules') {
       const desc = await getDescFIlm(film.url);
       const id = await getIDFilm(film.url);
       if(id == undefined){
-        await download(film.thumb, './film/' + rnd);
+        await download(film.thumb, './film/' + rnd, function(){
           const a = base64_encode('./film/' + rnd);
           var base64str = 'data:image/jpeg'+";base64,"+a.toString()
           client.sendImage(message.from,base64str,rnd, `*${film.title}*\n\nQuality : ${film.kualitas}\nRate : ⭐${desc.rate}\n${desc.durasi}\n${desc.genre}\nStreaming : ${film.url}\nDownload : not available`);
-        console.log(time(), 'SUCCESS | but link download film tidak tersedia')
+          console.log(time(), 'SUCCESS | but link download film tidak tersedia')
+        });
       }else{
           const link = await getLinkDown(id);
           const down = link.data;
@@ -3239,11 +3262,12 @@ else if (message.body.toLowerCase() == '/rules') {
               const pendek = await short(down[i].file);
               list += `[_${down[i].label}_] = ${pendek}\n`;
           }
-          await download(film.thumb, './film/' + rnd);
+          await download(film.thumb, './film/' + rnd, function(){
             const a = base64_encode('./film/' + rnd);
             var base64str = 'data:image/jpeg'+";base64,"+a.toString()
             client.sendImage(message.from,base64str,rnd, `*${film.title}*\n\nQuality : ${film.kualitas}\nRate : ⭐${desc.rate}\n${desc.durasi}\n${desc.genre}\nStreaming : ${film.url}\nDownload : \n${list}`);
             console.log(time(), `SUCCESS | send /film`)
+          });
       }
   }
 }else if (message.body.toLowerCase().startsWith('/stkline ')) {
@@ -3256,7 +3280,7 @@ else if (message.body.toLowerCase() == '/rules') {
   const rnd = 'sticker_'+id+randomName(5);
   const link = `https://sdl-stickershop.line.naver.jp/stickershop/v1/product/${id}/iphone/stickers@2x.zip`;
   const path = './line/' + rnd+'.zip';
-  await download(link, path);
+  await download(link, path, function(){
     fs.createReadStream(path).pipe(unzipper.Extract({ path: './stiker/'+rnd }));
     
     const query = await delay(2000, {value: './stiker/'+ rnd + '/**/*.png'});
@@ -3269,6 +3293,7 @@ else if (message.body.toLowerCase() == '/rules') {
       await client.sendImageAsSticker(message.from, base64str)
       console.log(result[i]);
     }
+  });
     console.log(time(), `SUCCESS | send sticker line`)
 }else if (message.body.toLowerCase().startsWith('/wiki ')) {
   const search = message.body.slice(6);
@@ -3376,12 +3401,13 @@ else if (message.body.toLowerCase() == '/rules') {
     client.sendText(message.from, `Judul : ${detail.title}\nBitrate : ${reverse.bitrate}\nSize : ${reverse.size}\nLink : ${await short(reverse.link)}\n\n_GAGAL! Tidak bisa mengirim audio!_`);  
   }else{
     client.sendText(message.from, `Judul : ${detail.title}\nBitrate : ${reverse.bitrate}\nSize : ${reverse.size}\nLink : ${await short(reverse.link)}\n\n_sedang mengirim audio..._`);
-    await download(reverse.link, './lagu/' + filename);
+    await download(reverse.link, './lagu/' + filename, function(){
       const filemime = await delay(2000, {value : mime.getType('./lagu/' + filename)});
       const a = await delay(2000, {value : base64_encode('./lagu/' + filename)});
       const audio = await delay(2000, {value : `data:${filemime};base64,${a.toString()}`});
       await delay(2000, {value : client.sendFile(message.from, audio, filename, detail.title, message.id)});
-    console.log(time(), `SUCCESS | send /lagu`);
+      console.log(time(), `SUCCESS | send /lagu`);
+    });
   }
 }else if (message.body == '/daftar') {
   client.sendText(message.from, `Format Daftar\n\nKirim dengan format :\n  /daftar {umur} {jenis kelamin (L/P)}\n  *L* untuk laki-laki\n  *P* untuk perempuan\ncontoh :\n  /daftar 18 L`)
@@ -3398,11 +3424,12 @@ else if (message.body.toLowerCase() == '/rules') {
   const nama = $('a').html();
   const filename = `${randomName(2)}-${nama}`;
   const down = get.split('../..').join('http://ydcode.team');
-  await download(down, './scribd/'+filename);
+  await download(down, './scribd/'+filename, function(){
     const filemime = mime.getType('./scribd/' + filename);
     const a = base64_encode('./scribd/' + filename);
     const file = `data:${filemime};base64,${a.toString()}`;
     client.sendFile(message.from, file, filename, nama);
+  });
 } else if (message.body.startsWith('/pinterest ')) {
   const link = message.body.slice(11);
   let url = await pinterest(link);
