@@ -41,7 +41,13 @@ wa.create('INI_SESSION', {
     // executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
     headless: true,
 }).then(client => start(client));
-
+const quoteit = (quote, nama = '') => new Promise((resolve, reject) => {
+    const author = nama = '' ? author : nama;
+    const kuot = escape(quote);
+    fetch(`https://razisek.com/api/quote/?quote=${kuot}&nama=${author}`).then(async res => {
+        resolve(await res.json());
+    }).catch(err => reject(err));
+});
 const pinterest = (target) => new Promise((resolve, reject) => {
   fetch('http://www.pinterestvideodownloader.com', {
     method: 'POST',
@@ -1914,7 +1920,7 @@ ${lacak}`);
               var rnd = randomName(30) + '.mp4';
               const video = res.data.links['Download Low Quality'];
               try{
-                await download(video, './facebook/' + rnd, function(){
+                await download(video, './facebook/' + rnd, async function(){
                   const a = base64_encode('./facebook/' + rnd);
                   var base64str = 'data:video/mp4'+";base64,"+a.toString()
                   client.sendFile(message.from, base64str, rnd, `sukses download! from *Facebook*\nHD : unavailable\nSD : ${await short(video)}`);
@@ -2431,7 +2437,6 @@ Matahari Terbenam => ${sunset}`)
       console.log(time(), `SUCCESS | send /simsimi`)
     })
   }else if (message.body.toLowerCase().startsWith('/quoteit ')) {
-    // client.reply(message.from, `/quoteit sedang diperbaiki`, message.id);
     (async () => {
         try {
           const disable = await getDB.cek_disable(message.from, '/quoteit');
@@ -2447,9 +2452,9 @@ Matahari Terbenam => ${sunset}`)
           const quote = input.split('|')[0];
           const nama = input.split('|')[1];
           if (nama == undefined) {
-            axios.get('https://razisek.com/api/quote/?quote=' + quote + '&nama=').then((res)=>{
               let rnd = randomName(30)+'.jpg';
-              const foto = res.data.file;
+              const data = await quoteit(quote);
+              const foto = data.file;
               try{
                 download(foto, './quote/' + rnd, function(){
                   const a = base64_encode('./quote/' + rnd);
@@ -2460,11 +2465,10 @@ Matahari Terbenam => ${sunset}`)
               } catch(err){
                 console.log(err)
               }
-            })
           }else{
-            axios.get('https://razisek.com/api/quote/?quote=' + quote + '&nama='+nama).then((res)=>{
               let rnd = randomName(30)+'.jpg';
-              const foto = res.data.file;
+              const data = await quoteit(quote, nama);
+              const foto = data.file;
               try{
                 download(foto, './quote/' + rnd, function(){
                   const a = base64_encode('./quote/' + rnd);
@@ -2475,7 +2479,57 @@ Matahari Terbenam => ${sunset}`)
               } catch(err){
                 console.log(err)
               }
+          }
+        }
+      }catch(err){}
+    })();
+  }else if(message.quotedMsg != null && message.body.toLowerCase() == '/quoteit'){
+  (async () => {
+        try {
+          const disable = await getDB.cek_disable(message.from, '/quoteit');
+         if (disable != 0) {
+          client.reply(message.from, `Fitur ini dinonaktifkan oleh admin grup`, message.id);
+          console.log(time(), `/add DISABLE`);
+         }else{
+          const quote = message.quotedMsgObj.body;
+          let rnd = randomName(30)+'.jpg';
+          const data = await quoteit(quote);
+          const foto = data.file;
+          try{
+            download(foto, './quote/' + rnd, function(){
+              const a = base64_encode('./quote/' + rnd);
+              var base64str = 'data:image/jpeg'+";base64,"+a.toString()
+              client.sendImage(message.from,base64str,rnd, 'Success Make Quote It!');
+              console.log(time(), `SUCCESS | make a quote it`)
             })
+          } catch(err){
+            console.log(err)
+          }
+        }
+      }catch(err){}
+    })();
+  }else if(message.quotedMsg != null && message.body.toLowerCase().startsWith('/quoteit ')){
+  (async () => {
+        try {
+          const disable = await getDB.cek_disable(message.from, '/quoteit');
+         if (disable != 0) {
+          client.reply(message.from, `Fitur ini dinonaktifkan oleh admin grup`, message.id);
+          console.log(time(), `/add DISABLE`);
+         }else{
+          const nama = message.body.slice(9);
+          const quote = message.quotedMsgObj.body;
+          let rnd = randomName(30)+'.jpg';
+          const data = await quoteit(quote, nama);
+          const foto = data.file;
+          try{
+            download(foto, './quote/' + rnd, function(){
+              const a = base64_encode('./quote/' + rnd);
+              var base64str = 'data:image/jpeg'+";base64,"+a.toString()
+              client.sendImage(message.from,base64str,rnd, 'Success Make Quote It!');
+              console.log(time(), `SUCCESS | make a quote it`)
+            })
+          } catch(err){
+            console.log(err)
           }
         }
       }catch(err){}
