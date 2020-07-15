@@ -2491,6 +2491,10 @@ Matahari Terbenam => ${sunset}`)
           client.reply(message.from, `Fitur ini dinonaktifkan oleh admin grup`, message.id);
           console.log(time(), `/add DISABLE`);
          }else{
+          function base64_encode(file) {
+            var bitmap = fs.readFileSync(file);
+            return new Buffer.from(bitmap).toString('base64');
+          }
           const quote = message.quotedMsgObj.body;
           let rnd = randomName(30)+'.jpg';
           const data = await quoteit(quote);
@@ -2516,6 +2520,10 @@ Matahari Terbenam => ${sunset}`)
           client.reply(message.from, `Fitur ini dinonaktifkan oleh admin grup`, message.id);
           console.log(time(), `/add DISABLE`);
          }else{
+          function base64_encode(file) {
+            var bitmap = fs.readFileSync(file);
+            return new Buffer.from(bitmap).toString('base64');
+          }
           const nama = message.body.slice(9);
           const quote = message.quotedMsgObj.body;
           let rnd = randomName(30)+'.jpg';
