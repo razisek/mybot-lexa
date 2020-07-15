@@ -2436,6 +2436,36 @@ Matahari Terbenam => ${sunset}`)
       client.sendText(message.from, res.data.atext);
       console.log(time(), `SUCCESS | send /simsimi`)
     })
+  }else if(message.quotedMsg != null && message.body.toLowerCase().startsWith('/quoteit ')){
+  (async () => {
+        try {
+          const disable = await getDB.cek_disable(message.from, '/quoteit');
+         if (disable != 0) {
+          client.reply(message.from, `Fitur ini dinonaktifkan oleh admin grup`, message.id);
+          console.log(time(), `/add DISABLE`);
+         }else{
+          function base64_encode(file) {
+            var bitmap = fs.readFileSync(file);
+            return new Buffer.from(bitmap).toString('base64');
+          }
+          const nama = message.body.slice(9);
+          const quote = message.quotedMsgObj.body;
+          let rnd = randomName(30)+'.jpg';
+          const data = await quoteit(quote, nama);
+          const foto = data.file;
+          try{
+            download(foto, './quote/' + rnd, function(){
+              const a = base64_encode('./quote/' + rnd);
+              var base64str = 'data:image/jpeg'+";base64,"+a.toString()
+              client.sendImage(message.from,base64str,rnd, 'Success Make Quote It!');
+              console.log(time(), `SUCCESS | make a quote it`)
+            })
+          } catch(err){
+            console.log(err)
+          }
+        }
+      }catch(err){}
+    })();
   }else if (message.body.toLowerCase().startsWith('/quoteit ')) {
     (async () => {
         try {
@@ -2498,36 +2528,6 @@ Matahari Terbenam => ${sunset}`)
           const quote = message.quotedMsgObj.body;
           let rnd = randomName(30)+'.jpg';
           const data = await quoteit(quote);
-          const foto = data.file;
-          try{
-            download(foto, './quote/' + rnd, function(){
-              const a = base64_encode('./quote/' + rnd);
-              var base64str = 'data:image/jpeg'+";base64,"+a.toString()
-              client.sendImage(message.from,base64str,rnd, 'Success Make Quote It!');
-              console.log(time(), `SUCCESS | make a quote it`)
-            })
-          } catch(err){
-            console.log(err)
-          }
-        }
-      }catch(err){}
-    })();
-  }else if(message.quotedMsg != null && message.body.toLowerCase().startsWith('/quoteit ')){
-  (async () => {
-        try {
-          const disable = await getDB.cek_disable(message.from, '/quoteit');
-         if (disable != 0) {
-          client.reply(message.from, `Fitur ini dinonaktifkan oleh admin grup`, message.id);
-          console.log(time(), `/add DISABLE`);
-         }else{
-          function base64_encode(file) {
-            var bitmap = fs.readFileSync(file);
-            return new Buffer.from(bitmap).toString('base64');
-          }
-          const nama = message.body.slice(9);
-          const quote = message.quotedMsgObj.body;
-          let rnd = randomName(30)+'.jpg';
-          const data = await quoteit(quote, nama);
           const foto = data.file;
           try{
             download(foto, './quote/' + rnd, function(){
