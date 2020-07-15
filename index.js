@@ -2431,55 +2431,55 @@ Matahari Terbenam => ${sunset}`)
       console.log(time(), `SUCCESS | send /simsimi`)
     })
   }else if (message.body.toLowerCase().startsWith('/quoteit ')) {
-    client.reply(message.from, `/quoteit sedang diperbaiki`, message.id);
-    // (async () => {
-    //     try {
-    //       const disable = await getDB.cek_disable(message.from, '/quoteit');
-    //      if (disable != 0) {
-    //       client.reply(message.from, `Fitur ini dinonaktifkan oleh admin grup`, message.id);
-    //       console.log(time(), `/quoteit DISABLE`);
-    //      }else{
-    //       function base64_encode(file) {
-    //         var bitmap = fs.readFileSync(file);
-    //         return new Buffer.from(bitmap).toString('base64');
-    //       }
-    //       const input = message.body.slice(9);
-    //       const quote = input.split('|')[0];
-    //       const nama = input.split('|')[1];
-    //       if (nama == undefined) {
-    //         axios.get('http://apimybot.000webhostapp.com/quote/?quote=' + quote + '&name=&bg=quote').then((res)=>{
-    //           let rnd = randomName(30)+'.png';
-    //           const foto = res.data.image;
-    //           try{
-    //             download(foto, './quote/' + rnd, function(){
-    //               const a = base64_encode('./quote/' + rnd);
-    //               var base64str = 'data:image/jpeg'+";base64,"+a.toString()
-    //               client.sendImage(message.from,base64str,rnd, 'Success Make Quote It!');
-    //               console.log(time(), `SUCCESS | make a quote it`)
-    //             })
-    //           } catch(err){
-    //             console.log(err)
-    //           }
-    //         })
-    //       }else{
-    //         axios.get('http://apimybot.000webhostapp.com/quote/?quote=' + quote + '&name='+nama+'&bg=quote').then((res)=>{
-    //           let rnd = randomName(30)+'.png';
-    //           const foto = res.data.image;
-    //           try{
-    //             download(foto, './quote/' + rnd, function(){
-    //               const a = base64_encode('./quote/' + rnd);
-    //               var base64str = 'data:image/jpeg'+";base64,"+a.toString()
-    //               client.sendImage(message.from,base64str,rnd, 'Success Make Quote It!');
-    //               console.log(time(), `SUCCESS | make a quote it`)
-    //             })
-    //           } catch(err){
-    //             console.log(err)
-    //           }
-    //         })
-    //       }
-    //     }
-    //   }catch(err){}
-    // })();
+    // client.reply(message.from, `/quoteit sedang diperbaiki`, message.id);
+    (async () => {
+        try {
+          const disable = await getDB.cek_disable(message.from, '/quoteit');
+         if (disable != 0) {
+          client.reply(message.from, `Fitur ini dinonaktifkan oleh admin grup`, message.id);
+          console.log(time(), `/quoteit DISABLE`);
+         }else{
+          function base64_encode(file) {
+            var bitmap = fs.readFileSync(file);
+            return new Buffer.from(bitmap).toString('base64');
+          }
+          const input = message.body.slice(9);
+          const quote = input.split('|')[0];
+          const nama = input.split('|')[1];
+          if (nama == undefined) {
+            axios.get('https://razisek.com/api/quote/?quote=' + quote + '&nama=').then((res)=>{
+              let rnd = randomName(30)+'.jpg';
+              const foto = res.data.file;
+              try{
+                download(foto, './quote/' + rnd, function(){
+                  const a = base64_encode('./quote/' + rnd);
+                  var base64str = 'data:image/jpeg'+";base64,"+a.toString()
+                  client.sendImage(message.from,base64str,rnd, 'Success Make Quote It!');
+                  console.log(time(), `SUCCESS | make a quote it`)
+                })
+              } catch(err){
+                console.log(err)
+              }
+            })
+          }else{
+            axios.get('https://razisek.com/api/quote/?quote=' + quote + '&nama='+nama).then((res)=>{
+              let rnd = randomName(30)+'.jpg';
+              const foto = res.data.file;
+              try{
+                download(foto, './quote/' + rnd, function(){
+                  const a = base64_encode('./quote/' + rnd);
+                  var base64str = 'data:image/jpeg'+";base64,"+a.toString()
+                  client.sendImage(message.from,base64str,rnd, 'Success Make Quote It!');
+                  console.log(time(), `SUCCESS | make a quote it`)
+                })
+              } catch(err){
+                console.log(err)
+              }
+            })
+          }
+        }
+      }catch(err){}
+    })();
   }else if (message.body.toLowerCase().startsWith('/salat ')) {
     (async () => {
         try {
