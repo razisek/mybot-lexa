@@ -36,7 +36,8 @@ const worker = createWorker();
 const uaOverride = 'WhatsApp/2.16.352 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Safari/605.1.15';
 
 wa.create('INI_SESSION', {
-    licenseKey : 'B45211W5jIvNCGT4Ijsqzn4WijiJ2beQ', 
+    licenseKey : 'CB504B49-44F240FA-BB53A828-6F2C467B', 
+    restartOnCrash: start,
     useChrome: true,
     // executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
     headless: true,
@@ -849,7 +850,7 @@ contoh: /lex LXRP-9031707489`);
   })();
 }else if (message.body.toLowerCase() == '#admin') {
   const admin = await client.getGroupAdmins(message.from);
-  let me_admin = await admin.find(o => o === '6281804700788@c.us');
+  let me_admin = await admin.find(o => o === '6285156774389@c.us');
   if (me_admin == undefined) {
     client.reply(message.from, `Maaf, BOT harus menjadi admin dahulu untuk menggunakan Fitur Admin`, message.id);
     console.log(time(), `FAILED | BOT LEXA Not admin`);
@@ -2009,7 +2010,7 @@ ${lacak}`);
         const admin = await client.getGroupAdmins(message.from);
         const sender = await message.sender.id;
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         const khusus = ['6289602957427@c.us', '6281918164651@c.us', '628980565152@c.us']
         if(me_admin == undefined){
           client.sendText(message.from, `Sepertinya saya bukan admin, jadi tidak bisa menambahkan member.`);
@@ -2046,7 +2047,7 @@ ${lacak}`);
         const admin = await client.getGroupAdmins(message.from);
         const sender = await message.sender.id;
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         if(me_admin == undefined){
           client.sendText(message.from, `Sepertinya saya bukan admin, jadi tidak bisa menambahkan member.`);
           console.log(time(), `FAILED | BOT LEXA Not admin`);
@@ -2080,7 +2081,7 @@ else if (message.body.toLowerCase().startsWith('/join ')) {
         const sender = await message.sender.id;
         const cek_no = await client.checkNumberStatus(`${target}@c.us`);
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         if(me_admin == undefined){
           client.sendText(message.from, `Sepertinya saya bukan admin, jadi tidak bisa menambahkan member.`);
           console.log(time(), `FAILED | BOT LEXA Not admin`);
@@ -2118,7 +2119,7 @@ else if (message.body.toLowerCase().startsWith('/join ')) {
         const sender = await message.sender.id;
         const cek_no = await client.checkNumberStatus(target);
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         if(me_admin == undefined){
           client.sendText(message.from, `Sepertinya saya bukan admin, jadi tidak bisa menambahkan member.`);
           console.log(time(), `FAILED | BOT LEXA Not admin`);
@@ -2155,7 +2156,7 @@ else if (message.body.toLowerCase().startsWith('/join ')) {
         const admin = await client.getGroupAdmins(group);
         const sender = await message.sender.id;
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         let target_kick = await admin.find(o => o === target+'@c.us');
         if(me_admin == undefined){
           client.sendText(message.from, `Sepertinya saya bukan admin, jadi tidak bisa mengeluarkan dari grup.`);
@@ -2195,7 +2196,7 @@ else if (message.body.toLowerCase().startsWith('/join ')) {
         const admin = await client.getGroupAdmins(group);
         const sender = await message.sender.id;
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         let target_kick = await admin.find(o => o === target);
         if(me_admin == undefined){
           client.sendText(message.from, `Sepertinya saya bukan admin, jadi tidak bisa mengeluarkan dari grup.`);
@@ -2232,7 +2233,7 @@ else if (message.body.toLowerCase().startsWith('/join ')) {
         const admin = await client.getGroupAdmins(message.from);
         const sender = await message.sender.id;
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         if(me_admin == undefined){
           client.sendText(message.from, `Maaf, saya bukan admin grup, tidak bisa mendapatkan tautan grup.`);
           console.log(time(), `FAILED | BOT LEXA Not admin`);
@@ -2264,7 +2265,7 @@ else if (message.body.toLowerCase().startsWith('/join ')) {
         const admin = await client.getGroupAdmins(message.from);
         const sender = await message.sender.id;
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         if(me_admin == undefined){
           client.sendText(message.from, `Maaf, saya bukan admin grup, tidak bisa membatalkan tautan grup.`);
           console.log(time(), `FAILED | BOT LEXA Not admin`);
@@ -2632,7 +2633,7 @@ ${salat.jadwal.data.tanggal}
         const admin = await client.getGroupAdmins(message.from);
         const sender = await message.sender.id;
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         const khusus = ['6289602957427@c.us', '6281918164651@c.us', '628980565152@c.us']
         if(me_admin == undefined){
           client.sendText(message.from, `Maaf, saya bukan admin grup, tidak bisa mengeluarkan member grup.`);
@@ -3067,7 +3068,7 @@ Menerima donasi berapapun jumlahnya 🙏 Terima Kasih `);
         const admin = await client.getGroupAdmins(group);
         const sender = await message.sender.id;
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         let target_kick = await admin.find(o => o === target);
         if(me_admin == undefined){
           client.sendText(message.from, `Sepertinya saya bukan admin, jadi tidak bisa memberi peringatan!`);
@@ -3110,7 +3111,7 @@ Menerima donasi berapapun jumlahnya 🙏 Terima Kasih `);
     const admin = await client.getGroupAdmins(message.from);
     const sender = await message.sender.id;
     let obj = await admin.find(o => o === sender);
-    let me_admin = await admin.find(o => o === '6281804700788@c.us');
+    let me_admin = await admin.find(o => o === '6285156774389@c.us');
     if(me_admin == undefined){
       client.sendText(message.from, `Sepertinya saya bukan admin, jadi tidak bisa memberi peringatan!`);
       console.log(time(), `FAILED | BOT LEXA Not admin`);
@@ -3152,7 +3153,7 @@ Menerima donasi berapapun jumlahnya 🙏 Terima Kasih `);
         const admin = await client.getGroupAdmins(group);
         const sender = await message.sender.id;
         let obj = await admin.find(o => o === sender);
-        let me_admin = await admin.find(o => o === '6281804700788@c.us');
+        let me_admin = await admin.find(o => o === '6285156774389@c.us');
         if(me_admin == undefined){
           client.sendText(message.from, `Sepertinya saya bukan admin, jadi tidak bisa mengeluarkan dari grup.`);
           console.log(time(), `FAILED | BOT LEXA Not admin`);
