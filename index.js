@@ -905,6 +905,11 @@ else if (message.body.toLowerCase() == '/menu') {
   client.sendText(message.from, `
 *SELAMAT DATANG*
 
+=================================
+_BOT ini mendapat sponsor dari_ :
+Beli VPS hosting / RDP bulanan, tahunan, Murah. Langsung Order https://wa.me/6285333111700
+=================================
+
 *List Menu :*
 
 *#donasi* = informasi untuk donasi
