@@ -438,10 +438,10 @@ async function start(client) {
           client.sendTextWithMentions(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
         }else{
           const get_db = decodeURIComponent(msg.msg_add);
-          const nama = get_db.split('{nama}').join(`@${target}`);
-          const pesan = nama.split('{grup}').join(info.name);
-          console.log(pesan);
-          client.sendTextWithMentions(change.chat, pesan);
+          // const nama = get_db.split('{nama}').join(`@${target}`);
+          // const pesan = nama.split('{grup}').join(info.name);
+          // console.log(pesan);
+          client.sendText(change.chat, get_db);
         }
       }else if (change.action == 'remove') {
         const msg = await getDB.msg_kick(change.chat);
@@ -453,10 +453,10 @@ async function start(client) {
           client.sendTextWithMentions(change.chat, `@${target} telah keluar dari grub`);
         }else{
           const get_db = decodeURIComponent(msg.msg_kick);
-          const nama = get_db.split('{nama}').join(`@${target}`);
-          const pesan = nama.split('{grup}').join(info.name);
-          console.log(pesan);
-          client.sendTextWithMentions(change.chat, pesan);
+          // const nama = get_db.split('{nama}').join(`@${target}`);
+          // const pesan = nama.split('{grup}').join(info.name);
+          // console.log(pesan);
+          client.sendText(change.chat, get_db);
         }
       }
     }catch(err){console.log(err)}
