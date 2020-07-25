@@ -433,9 +433,9 @@ async function start(client) {
         //   user += `@${nomer},`;
         // }
         if (msg == undefined) {
-          client.sendTextWithMentions(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
+          client.sendText(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
         }else if (msg.msg_add.length == 0) {
-          client.sendTextWithMentions(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
+          client.sendText(change.chat, `Selamat datang di *${info.name}*, Silahkan untuk memperkenalkan diri.`);
         }else{
           const get_db = decodeURIComponent(msg.msg_add);
           // const nama = get_db.split('{nama}').join(`@${target}`);
