@@ -41,6 +41,9 @@ wa.create('INI_SESSION', {
     useChrome: true,
     // executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
     headless: true,
+    killProcessOnBrowserClose: true,
+    safeMode: true,
+    restartOnCrash: start,
 }).then(client => start(client));
 
 const igprice = (user) => new Promise((resolve, reject) => {
