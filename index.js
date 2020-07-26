@@ -42,6 +42,12 @@ wa.create('INI_SESSION', {
     // executablePath: 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
     headless: true,
 }).then(client => start(client));
+
+const igprice = (user) => new Promise((resolve, reject) => {
+    fetch(`https://igprice.me/api/v1/check?username=${user}`).then(async res => {
+        resolve(await res.json());
+    }).catch(err => reject(err));
+});
 const quoteit = (quote, nama = '') => new Promise((resolve, reject) => {
     const author = nama = '' ? author : nama;
     const kuot = escape(quote);
@@ -3477,9 +3483,6 @@ else if (message.body.toLowerCase() == '/rules') {
       console.log(time(), `SUCCESS | send /lagu`);
     });
   }
-}else if (message.body == '/daftar') {
-  client.sendText(message.from, `Format Daftar\n\nKirim dengan format :\n  /daftar {umur} {jenis kelamin (L/P)}\n  *L* untuk laki-laki\n  *P* untuk perempuan\ncontoh :\n  /daftar 18 L`)
-  console.log(time(), `SUCCESS, info daftar`)
 }else if (message.body.startsWith('/scribd ')) {
   function base64_encode(file) {
     var bitmap = fs.readFileSync(file);
@@ -3503,10 +3506,26 @@ else if (message.body.toLowerCase() == '/rules') {
   let url = await pinterest(link);
   await client.sendFileFromUrl(message.from, url, `pinterest`, `Sukses mengunduh file dari Pinterest`);
   console.log(time(), `SUCCESS | send /pinterest`);
+} else if (message.body.toLowerCase().startsWith('/igprice ')) {
+    var nf = new Intl.NumberFormat();
+    const input = message.body.slice(9);
+    const user = input.split('@').join('');
+    const data = await igprice(user);
+    if (data.status == 'error') {
+        console.log(time(), `FAILED | igprice`);
+        client.sendText(message.from, `*GAGAL*, ${data.message}`);
+    } else {
+      client.sendText(message.from, `Kalkulasi Harga Instagram ${data.data.username} (${data.data.full_name})\n\nInfo Akun :\n  Jumlah media : ${nf.format(data.data.media_count)}\n  Jumlah Followers : ${nf.format(data.data.follower_count)}\n  Jumlah Following : ${nf.format(data.data.following_count)}\nRata-rata :\n  Rata-rata Like : ${nf.format(data.data.average.average_likes)}\n  Rata-rata Komen : ${nf.format(data.data.average.average_comments)}\n  Rata-rata Interaksi : ${nf.format(data.data.average.average_interaction)}\nRate keterikatan : ${data.data.engagement.engagement_rate}%\nHarga : ${data.data.price[1].estimated.toLocaleString('id-ID', {style: 'currency',currency: 'IDR',})}`);
+      console.log(time(), `SUCCESS | igprice`);
+    }
 }
 
 
 // CARI JODOH MOMENT
+else if (message.body == '/daftar') {
+  client.sendText(message.from, `Format Daftar\n\nKirim dengan format :\n  /daftar {umur} {jenis kelamin (L/P)}\n  *L* untuk laki-laki\n  *P* untuk perempuan\ncontoh :\n  /daftar 18 L`)
+  console.log(time(), `SUCCESS, info daftar`)
+}
 else if (message.body.startsWith('/daftar ')) {
   const info = await client.getChatById(message.from)
   if (info.isGroup == true) {
