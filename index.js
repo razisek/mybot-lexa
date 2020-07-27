@@ -2434,10 +2434,14 @@ Matahari Terbenam => ${sunset}`)
         }
       }catch(err){}
     })();
-}else if (message.body.startsWith('/simi ')) {
-  const key = ['7cT4czxbnoXcR8Bo13j4c+9bIceN+nwuB7Svtta5', 'gYNE9vZuf5vu4fgAFzZR4Dt50WyoxWCR0qgwdeMn', 'oNj3eZrOBe51AlDnIXi3vXj+6OBV7G0bBX3cD9BP', 'eQ/W3hC/NJHrcHLXMPjKnI4mkmexcCd9EbLO5tBs', 'sugi2me/bWmOc4Rl8WCuxAaEPs1sSnamGoE9d+eC', 'XYLJZrtruJYaJ77/H/y2vjXodRTsPDzu4OGuA8Ku', 'K9A7Zhs2FYjpaLDJRoOevLdzbIdqOyjK6u7ifH/V', 'uWoC6dTGB6YUOnWo94rIv9T2wn3kaA3reQu8/cT7', 'uzQMFVPZ+COTw+UUrnBSAglTy6I6bJI+1kAzRnCM', 'GaSmtsjdMtqROIO1p5l1Iy/tIUxxXLma1Kmpz7pX', 'JuJT1x6zprpJc1fQgcHFimKTgxUE7ZimaTilTkJp', 'XEnHHQLRKTHfCdcK0bCyRja3YaeaixuDwiyfaGG8', '9+OfCITo4y14prb9nFyGXQxNtxwpR/5IYFSwbVBb', '02XdfmEkGU6PomjMfCEZXKPReD6rlR+NAOUqqBuv', 'fsir2ydCGs1VyJF+MEYZ5k06K3ZBzQcUADmbsuwe'];
-  const no = Math.floor(Math.random() * 14) + 0 ;
-  const pesan = message.body.slice(6);
+}else if (message.body.startsWith('. ')) {
+ function rndnum(count){
+    const so = count - 1;
+    return Math.ceil(Math.random() * so);
+  }
+  const key = ['_sQd4aZFCQlm6jkLt-o8OzsAtGJjs5XrzjcNtvAF', '2Bg~yApSLZOIHPG5igRl6~l~IgC9vwFlEyS4xjM6', '2f0GBgnX2nPIuJux.7Bl3Xp.BOC92_d6nK.d7G1p', '.nwlEn1OARFrlUC3e7uBQrcWb7x-Gm7w8PMCTcau', 'x_Nx4u7t5SfmoPOTnx6F3T-i436w9v0YW.OfzkCD', 'NnXbKTCZeXBcJqn.hb7vOD-u4fbdsZH_16ua1c.o', '71BpKzXRCDfMafKnvhLOqauNPwKT8c52jM6KA9lh', '51rl-i8OvjkbSyAe35ULjMkbIWH50~OhOqwfaTzz', 'JdHzerEyoWgZqV2nvHi4Qt792-WIlBk~aIe5IicP', 'LcoNLIyhwHrlAId8Dk-Bd1lGOF0C2C9hT5jK9zX4', 'xh4Itohn8h7Om4B7pc_n4zJCHRnuX8wUGUAdydks', 'mqq1jTvIbBDsTn2vLKR3ux~vuWb5-DeGcOcGfp6D', 'Y.CX6mwdFkBhJzGA8P134ktX2gsdJC8XETSoxtGH', 'GMRchwrk7ggCZwOf~EWL6T82f9AzkjOI.9cfxxsG', 'sb4ro6_G5mHotzoMEQorXlOiZ4KeEa-eqm3EZmD6', 'KUYeGJUIP~Ryfqqm6gStpId82Nwu6X9Xj-SbMzq9', 'LPyPk_Ku-MhUqnRF-mhPdt23bn5kGLidi._SvnPK', 'cdvZl6dpCvTHQuZcMzLXf6HC9gXk6qd0TRs7tDHI', '42wgV0DtH5rA4NBApu_13ye9t39bjTQkTkzr~V4I', 'CnMXhJmjf7.7-m9ujKpriPNaBojONHHbPsG7XfWd', 'qNILz9ElwYzE83JzXDrnE2_biBFWfm4maCrDJi3T', 'qTa350ebwJi.WeGakd61M~VoFl0nAizpZ7m09hY4', 'y9ooMWJb9_MOEpR2aQgLlf7ZOFiuismwa6fhwkNI', 'w8Zc33RaBoGY4LzcnHn6sECU1lMnr1Eget6.oWZy', '-0OPV1nX_iUK5u4WJ6VaxKTnZerI846Q2wALlk6P', 'azIpnWJ9V79lNGHhmk~W_IJZsftw~3A4xHj~_iZN', '9ChLPOsIioLQwC-LCyuySafJ8Z4kVhBkNrEc9LfZ', 'dKKWRo5WMgqcTUElvV3B29hJXTQYwsPqpNY7CGwp', 'iN28n0NNwcq~0zOBSqfcT0kmwLTWgUKH3fb7K04l', 'LPSsYwgzAlnPahw_xfEBVBuO1WTeUP5aYlWQ_LVc', 'SKybQ3IA4AxQP.FGQxTF2ufltqgbXElVmyMNgUYH'];
+  const no = rndnum(key.length);
+  const pesan = message.body.slice(2);
     const headers = {
       'Content-Type': 'application/json',
       'x-api-key': key[no]
